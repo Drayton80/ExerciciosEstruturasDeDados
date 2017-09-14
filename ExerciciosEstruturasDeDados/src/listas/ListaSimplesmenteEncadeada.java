@@ -77,17 +77,53 @@ public class ListaSimplesmenteEncadeada<Generico> {
         
         if(posicao <= 0 || numero_de_elementos < posicao){
             throw new PosicaoInvalidaException();
-        }else{
-            for(int i = 1; i <= numero_de_elementos; i++){
-                if(i == posicao){
-                    return auxiliar.get_conteudo();
-                }else{
-                    auxiliar = auxiliar.get_proximo();
-                }
+        }
+        
+        //Meu Jeito (Menos Eficiente):
+        //for(int i = 1; i <= numero_de_elementos; i++){
+        //    if(i == posicao){
+        //        return auxiliar.get_conteudo();
+        //    }else{
+        //        auxiliar = auxiliar.get_proximo();
+        //    }
+        //}
+        
+        //Modelo do Professor (Mais Eficiente):
+        for(int i = 1; i < posicao; i++){
+            auxiliar = auxiliar.get_proximo();
+        }
+
+        return auxiliar.get_conteudo();
+    }
+    
+    public int posicao(Generico valor){
+        No auxiliar = cabeca;
+        
+        if(numero_de_elementos == 1 && auxiliar.get_conteudo().equals(valor)){
+            return numero_de_elementos; 
+        }
+        
+        for(int i = 1; i < numero_de_elementos; i++){            
+            if(auxiliar.get_conteudo().equals(valor)){
+                return i;
+            }else{
+                auxiliar = auxiliar.get_proximo();
             }
         }
         
-        return null;
+        //Outra forma de implementação:
+        //int contador = 1;
+        //
+        //while(auxiliar != null){
+        //    if(auxiliar.get_conteudo().equals(valor)){
+        //        return contador;
+        //    }
+        //    
+        //    auxiliar = auxiliar.get_proximo();
+        //    
+        //    contador++;
+        //}
+        
+        return -1;
     }
-    
 }
