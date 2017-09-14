@@ -1,8 +1,9 @@
-package estruturasDeDados.listas;
+package listas;
 
 /**
- *
- * @author drayt
+ *  tentativa de implementação da Lista Sequencial Generica, Está incompleta e dando erro
+ *      Nota: refazer ela toda do inicio
+ * @author drayton80
  */
 public class ListaSequencialGenerica<T>{
     private int tamanho_maximo;
