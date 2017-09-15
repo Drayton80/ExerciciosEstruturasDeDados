@@ -13,7 +13,6 @@ public class Exercicio1 {
         Scanner entrada = new Scanner(System.in);
         int[] valores_s, valores_q;
         int sn, qm, contador = 0;
-        int contador_auxiliar = 0;
         int[] valores_diferentes;
         boolean possui_igual;
         String exibicao_dos_diferentes = "";
@@ -39,7 +38,12 @@ public class Exercicio1 {
         /* O máximo que o tamanho do array de valores diferentes pode ter é o tamanho
            da soma dos dois arrays comparados, pois, nesse caso, todos os números de
            ambos os arrays seriam diferentes. */
-        valores_diferentes = new int[(sn+qm)];
+        //valores_diferentes = new int[(sn+qm)];
+        
+        /* Erro de interpretação meu, é mais fácil do que eu pensava, o teste não
+         * não é em diferença de ambos, mas apenas de um em relação ao outro.
+         */
+        valores_diferentes = new int[sn];
         
         for(int i = 0; i < valores_s.length; i++){
             possui_igual = false;
@@ -52,31 +56,24 @@ public class Exercicio1 {
             
             if(possui_igual != true){
                 valores_diferentes[contador] = valores_s[i];
-                
-                //if(contador == 0){
-                //    exibicao_dos_diferentes += String.valueOf(valores_s[i]);
-                //}else{
-                //    exibicao_dos_diferentes += " " + String.valueOf(valores_s[i]);
-                //}
-                
                 contador++;
             }
         }
         
-        for(int i = 0; i < valores_q.length; i++){
-            possui_igual = false;
-            
-            for(int j = 0; j < valores_s.length; j++){
-                if(valores_q[i] == valores_s[j]){
-                    possui_igual = true;
-                }
-            }
-            
-            if(possui_igual != true){
-                valores_diferentes[contador] = valores_q[i];                
-                contador++;
-            }
-        }
+        //for(int i = 0; i < valores_q.length; i++){
+        //    possui_igual = false;
+        //    
+        //    for(int j = 0; j < valores_s.length; j++){
+        //        if(valores_q[i] == valores_s[j]){
+        //            possui_igual = true;
+        //        }
+        //    }
+        //    
+        //    if(possui_igual != true){
+        //        valores_diferentes[contador] = valores_q[i];                
+        //        contador++;
+        //    }
+        //}
         
         /* O Arrays.sort ordena em ordem crescente. Os dois ultimos parametros
          * definem o limite da ordenação. Se não fosse limitado, os 0 que completam
