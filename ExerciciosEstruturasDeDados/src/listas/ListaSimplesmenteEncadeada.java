@@ -126,4 +126,31 @@ public class ListaSimplesmenteEncadeada<Generico> {
         
         return -1;
     }
+    
+    private void insere_no_inicio(Generico valor){
+        No novo_no = new No();
+        
+        novo_no.set_conteudo(valor);
+        novo_no.set_proximo(cabeca);
+        
+        cabeca = novo_no;
+        
+        numero_de_elementos++;
+    }
+    
+    private void insere_no_meio(int posicao, Generico valor){
+        No novo_no  = new No();
+        No auxiliar = cabeca;
+        
+        novo_no.set_conteudo(valor);
+        
+        for(int i = 1; i < (posicao - 1); i++){
+            auxiliar = auxiliar.get_proximo();
+        }
+        
+        novo_no.set_proximo(auxiliar.get_proximo());
+        auxiliar.set_proximo(novo_no);
+        
+        numero_de_elementos++;
+    }
 }
