@@ -1,5 +1,6 @@
 package SPOJ;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import listas.*;
 
@@ -12,6 +13,7 @@ public class Exercicio1 {
         Scanner entrada = new Scanner(System.in);
         int[] valores_s, valores_q;
         int sn, qm, contador = 0;
+        int contador_auxiliar = 0;
         int[] valores_diferentes;
         boolean possui_igual;
         String exibicao_dos_diferentes = "";
@@ -51,11 +53,11 @@ public class Exercicio1 {
             if(possui_igual != true){
                 valores_diferentes[contador] = valores_s[i];
                 
-                if(contador == 0){
-                    exibicao_dos_diferentes += String.valueOf(valores_s[i]);
-                }else{
-                    exibicao_dos_diferentes += " " + String.valueOf(valores_s[i]);
-                }
+                //if(contador == 0){
+                //    exibicao_dos_diferentes += String.valueOf(valores_s[i]);
+                //}else{
+                //    exibicao_dos_diferentes += " " + String.valueOf(valores_s[i]);
+                //}
                 
                 contador++;
             }
@@ -71,15 +73,23 @@ public class Exercicio1 {
             }
             
             if(possui_igual != true){
-                valores_diferentes[contador] = valores_q[i];
-                
-                if(contador == 0){
-                    exibicao_dos_diferentes += String.valueOf(valores_q[i]);
-                }else{
-                    exibicao_dos_diferentes += " " + String.valueOf(valores_q[i]);
-                }
-                
+                valores_diferentes[contador] = valores_q[i];                
                 contador++;
+            }
+        }
+        
+        /* O Arrays.sort ordena em ordem crescente. Os dois ultimos parametros
+         * definem o limite da ordenação. Se não fosse limitado, os 0 que completam
+         * o restante do Array iriam ser os únicos a aparecer no exibição_dos_diferentes
+         */
+        Arrays.sort(valores_diferentes, 0, (contador-1));
+
+        
+        for(int i = 0; i < contador; i++){
+            if(i == 0){
+                exibicao_dos_diferentes += String.valueOf(valores_diferentes[i]);
+            }else{
+                exibicao_dos_diferentes += " " + String.valueOf(valores_diferentes[i]);
             }
         }
         
