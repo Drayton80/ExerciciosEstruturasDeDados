@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package listas;
 
 /**
@@ -148,9 +143,52 @@ public class ListaSimplesmenteEncadeada<Generico> {
             auxiliar = auxiliar.get_proximo();
         }
         
-        novo_no.set_proximo(auxiliar.get_proximo());
+        if(posicao == numero_de_elementos){
+            novo_no.set_proximo(null);
+        }else{
+            novo_no.set_proximo(auxiliar.get_proximo());
+        }
+
         auxiliar.set_proximo(novo_no);
         
         numero_de_elementos++;
     }
+    
+    public void insere(int posicao, Generico valor)
+            throws OutOfLimitsException, PosicaoInvalidaException{
+        
+        if(vazia() && posicao != 1){
+            throw new PosicaoInvalidaException();
+        }
+        
+        
+        if( posicao == 1 ){
+            insere_no_inicio(valor);
+            
+        }else{
+            if(posicao < 1 || numero_de_elementos < posicao){
+                throw new OutOfLimitsException();
+            }
+            
+            insere_no_meio(posicao, valor);
+        }
+    }
+    
+    private Generico remove_no_inicio(){
+        No auxiliar = cabeca;
+        Generico valor = auxiliar.get_conteudo();
+        
+        cabeca = auxiliar.get_proximo();
+        
+        auxiliar.set_proximo(null);
+        
+        numero_de_elementos--;
+        
+        return valor;
+    }
+    
+    //private Generico remove_no_meio(int posicao){
+    //    
+    //}
+    //Ainda a ser terminada
 }
