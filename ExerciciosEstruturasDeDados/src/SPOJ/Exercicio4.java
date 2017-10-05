@@ -3,7 +3,7 @@ package SPOJ;
 import java.util.Scanner;
 
 public class Exercicio4 {
-    //Classe Pilha Encadeada feita em sala de aula
+    //Classe Pilha Encadeada feita em sala de aula.
     private static class PilhaEnc<Tipo> {
         class No{
             private Tipo conteudo;
