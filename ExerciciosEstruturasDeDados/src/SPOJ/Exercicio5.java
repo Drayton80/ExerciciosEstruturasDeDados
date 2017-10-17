@@ -342,31 +342,31 @@ public class Exercicio5 {
                         break;
                         
                     case "reverse":
-                        PilhaEnc pilha = new PilhaEnc();
-
-                        int tamanhoFixo = fila.size();
-                        
-                        for(int j = 1; j <= tamanhoFixo; j++){             
-                            pilha.push(fila.front());   // Põem o primeiro elemento da fila em uma pilha
-                                                        // para acumular invertido.
-                        }
-                        
-                        for(int j = 1; j <= tamanhoFixo; j++){                             
-                            fila.push_back((Integer) pilha.pop());    // Pega o elemento do topo da pilha e põem
-                                                                      // no fim da fila efetivamente invertendo-a
-                        }
-                        //if(!fila.empty()){
-                        //    int[] numeros = new int[fila.size()];
-                        //    int tamanhoFila = fila.size();
+                        //PilhaEnc pilha = new PilhaEnc();
 //
-                        //    for(int j = 0; j < tamanhoFila; j++){
-                        //        numeros[j] = fila.back();
-                        //    }
-//
-                        //    for(int j = 0; j < tamanhoFila; j++){
-                        //        fila.push_back(numeros[j]);
-                        //    }
+                        //int tamanhoFixo = fila.size();
+                        //
+                        //for(int j = 1; j <= tamanhoFixo; j++){             
+                        //    pilha.push(fila.front());   // Põem o primeiro elemento da fila em uma pilha
+                        //                                // para acumular invertido.
                         //}
+                        //
+                        //for(int j = 1; j <= tamanhoFixo; j++){                             
+                        //    fila.push_back((Integer) pilha.pop());    // Pega o elemento do topo da pilha e põem
+                        //                                              // no fim da fila efetivamente invertendo-a
+                        //}
+                        if(!fila.empty()){
+                            int[] numeros = new int[fila.size()];
+                            int tamanhoFila = fila.size();
+//
+                            for(int j = 0; j < tamanhoFila; j++){
+                                numeros[j] = fila.back();
+                            }
+//
+                            for(int j = 0; j < tamanhoFila; j++){
+                                fila.push_back(numeros[j]);
+                            }
+                        }
 
                         break;
                     
