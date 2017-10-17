@@ -289,7 +289,12 @@ public class Exercicio5 {
         int contador = 0;
         int tamanho = 0;
         
-        tamanho = Integer.parseInt(scan.nextLine());
+        try{
+            tamanho = Integer.parseInt(scan.nextLine());
+        }catch(NumberFormatException n){
+            
+        }
+        
         resultados = new String[tamanho];  // O maior tamanho possível de resultados é igual ao tamanho
                                            // de comandos, pois não poderá ser produzidos mais resultados
                                            // que comandos.
@@ -303,7 +308,9 @@ public class Exercicio5 {
             if(comando_e_numero.length == 2){
                 if(comando_e_numero[0].equals("toFront")){
                     fila.toFront( Integer.parseInt( comando_e_numero[1] ) );
-                }else{
+                }
+                
+                if(comando_e_numero[0].equals("toFront")){
                     fila.push_back( Integer.parseInt( comando_e_numero[1] ) );
                 }
             
@@ -345,6 +352,9 @@ public class Exercicio5 {
                                                                       // no fim da fila efetivamente invertendo-a
                         }
                         
+                        break;
+                    
+                    default:
                         break;
                 }
             }
