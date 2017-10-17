@@ -287,7 +287,7 @@ public class Exercicio5 {
         Scanner scan = new Scanner(System.in);
         String[] resultados;
         int contador = 0;
-        int tamanho = 0;
+        int tamanho = 1;
         
         try{
             tamanho = Integer.parseInt(scan.nextLine());
@@ -310,7 +310,7 @@ public class Exercicio5 {
                     fila.toFront( Integer.parseInt( comando_e_numero[1] ) );
                 }
                 
-                if(comando_e_numero[0].equals("toFront")){
+                if(comando_e_numero[0].equals("push_back")){
                     fila.push_back( Integer.parseInt( comando_e_numero[1] ) );
                 }
             
