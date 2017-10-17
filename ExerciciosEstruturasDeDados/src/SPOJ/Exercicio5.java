@@ -268,20 +268,16 @@ public class Exercicio5 {
 	     p = null; 
 	     return valor;
 	}
-        
-        //public AdaQueue reverse(AdaQueue fila){
-        //    PilhaEnc pilha = new PilhaEnc();
-        //    //No auxiliar = fila.cabeca;
+       
+        // Não funciona:
+        //public void reverse(){
+        //    No auxiliarCabeca = cabeca;
+        //    No auxiliarCauda = cauda;
         //    
-        //    for(int i = 1; i <= fila.size(); i++){             
-        //        pilha.push((Tipo) fila.front());
-        //    }
+        //    cabeca.getProx().setAnt(cauda);
         //    
-        //    for(int i = 1; i <= fila.size(); i++){                             
-        //        fila.toFront( pilha.pop() );
-        //    }
-        //    
-        //    return fila;
+        //    cabeca = cauda;
+        //    cauda = auxiliarCabeca;            
         //}
 		
     }
@@ -342,34 +338,54 @@ public class Exercicio5 {
                         break;
                         
                     case "reverse":
-                        //PilhaEnc pilha = new PilhaEnc();
-//
-                        //int tamanhoFixo = fila.size();
-                        //
-                        //for(int j = 1; j <= tamanhoFixo; j++){             
-                        //    pilha.push(fila.front());   // Põem o primeiro elemento da fila em uma pilha
-                        //                                // para acumular invertido.
-                        //}
-                        //
-                        //for(int j = 1; j <= tamanhoFixo; j++){                             
-                        //    fila.push_back((Integer) pilha.pop());    // Pega o elemento do topo da pilha e põem
-                        //                                              // no fim da fila efetivamente invertendo-a
-                        //}
-                        if(!fila.empty()){
-                            int[] numeros = new int[fila.size()];
-                            int tamanhoFila = fila.size();
-//
-                            for(int j = 0; j < tamanhoFila; j++){
-                                numeros[j] = fila.back();
-                            }
-//
-                            for(int j = 0; j < tamanhoFila; j++){
-                                fila.push_back(numeros[j]);
-                            }
+                        //Dá time limits exceeds:
+                        PilhaEnc pilha = new PilhaEnc();
+                        
+                        int tamanhoFixo = fila.size();
+                        
+                        for(int j = 1; j <= tamanhoFixo; j++){             
+                            pilha.push(fila.front());   // Põem o primeiro elemento da fila em uma pilha
+                                                        // para acumular invertido.
                         }
-
-                        break;
-                    
+                        
+                        for(int j = 1; j <= tamanhoFixo; j++){                             
+                            fila.push_back((Integer) pilha.pop());    // Pega o elemento do topo da pilha e põem
+                                                                      // no fim da fila efetivamente invertendo-a
+                        }
+                        
+                        // Dá Time limits exceeds:
+                        //if(!fila.empty()){
+                        //    int[] numeros = new int[fila.size()];
+                        //    int tamanhoFila = fila.size();
+                        //
+                        //    for(int j = 0; j < tamanhoFila; j++){
+                        //        numeros[j] = fila.back();
+                        //    }
+                        //
+                        //    for(int j = 0; j < tamanhoFila; j++){
+                        //        fila.push_back(numeros[j]);
+                        //    }
+                        //}
+                        
+                        // Não funciona:
+                        //if(!fila.empty()){
+                        //    int tamanhoFila = fila.size();
+                        //    AdaQueue<Integer> fila_auxiliar = fila;
+                        //    
+                        //    if(!(fila.size() == 1)){
+                        //        for(int j = 0; j < tamanhoFila; j++){
+                        //            //System.out.println("Round " + (j+1) + "." + (i+1));
+                        //            String.valueOf(fila_auxiliar.front());
+                        //            //System.out.println("numero removido:" + erro);
+                        //            fila_auxiliar.push_back(fila.back());
+                        //        }
+                        //        
+                        //        fila = fila_auxiliar;
+                        //    }
+//
+                        //    break;
+                        //}
+                        
                     default:
                         break;
                 }
