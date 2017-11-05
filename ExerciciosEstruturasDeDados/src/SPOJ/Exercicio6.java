@@ -268,7 +268,7 @@ public class Exercicio6 {
             String aux = "";
             
             if (T == null){
-                return aux;
+                return "";
             }
 
             if (T.getEsq() != null){
@@ -282,8 +282,7 @@ public class Exercicio6 {
                 //System.out.println(aux);
             }
             
-            System.out.println(aux);
-            return String.valueOf(T.getConteudo()) + " ";
+            return String.valueOf(aux + " " + T.getConteudo());
         }
         
         public String gera_pos_order() {
@@ -327,21 +326,17 @@ public class Exercicio6 {
         // da árvore é trocada pela raiz da árvore temporária
         arvore.set_raiz(arvore.construir_arvore(valores_pre_order, valores_in_order, 0, numero_elementos - 1));
         
-        arvore.exibePosOrdem();
-        
         // Depois comparo o pos order lançado pela arvore com o post order pego como entrada
         String pos_order_arvore = arvore.gera_pos_order();
-        System.out.println(pos_order_arvore);
+        //System.out.println(pos_order_arvore);
         
-        if(pos_order_arvore.equals(" " + pos_com_espacos + " ")){
+        // Aqui eu adiciono um espaço pois, pela forma como fiz o return do gera_pos_order, a string em sequência
+        // da pos ordem sempre vem com um espaçoa à mais no início.
+        if(pos_order_arvore.equals(" " + pos_com_espacos)){
             System.out.print("yes");
         }else{
             System.out.print("no");
         }
-        
-        
-        
-        
         
     }
     
