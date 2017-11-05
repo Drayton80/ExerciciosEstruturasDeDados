@@ -302,11 +302,10 @@ public class Exercicio6 {
         String pre_com_espacos, pos_com_espacos, in_com_espacos;
         String[] pre_sem_espacos, pos_sem_espacos, in_sem_espacos;
         int numero_elementos;
-        int[] valores_pre_order, valores_pos_order, valores_in_order;  
+        int[] valores_pre_order, valores_in_order;  
         
         numero_elementos = Integer.parseInt(scan.nextLine());
         valores_pre_order = new int[numero_elementos];
-        valores_pos_order = new int[numero_elementos];
         valores_in_order = new int[numero_elementos];
         
         pre_com_espacos = scan.nextLine();
@@ -318,7 +317,6 @@ public class Exercicio6 {
         
         for(int i = 0; i < numero_elementos; i++){
             valores_pre_order[i] = Integer.parseInt(pre_sem_espacos[i]);
-            valores_pos_order[i] = Integer.parseInt(pos_sem_espacos[i]);
             valores_in_order[i]  = Integer.parseInt(in_sem_espacos[i]);
         }
         
