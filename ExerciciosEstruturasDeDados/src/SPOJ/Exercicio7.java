@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package SPOJ;
 
 import java.util.Scanner;
@@ -11,12 +6,12 @@ import java.util.Scanner;
  * @author drayton80
  */
 
-public class Exercicio6 {
-    public static class ArvBin {
+public class Exercicio7 {
+    public static class ArvBin<Tipo> {
         public static int indice = 0;
         
         public class No {
-            private int conteudo;
+            private Tipo conteudo;
             private No esq;
             private No dir;
 
@@ -25,10 +20,10 @@ public class Exercicio6 {
                 dir = null;
             }
 
-            public int getConteudo() {
+            public Tipo getConteudo() {
                 return conteudo;
             }
-            public void setConteudo(int conteudo) {
+            public void setConteudo(Tipo conteudo) {
                     this.conteudo = conteudo;
             }
 
@@ -48,37 +43,6 @@ public class Exercicio6 {
             }
         }
         
-        // Há parametros de inicio e fim por causa da recursão 
-        public No construir_arvore(int[] pre_order, int[] in_order, int inicio_in_order, int fim_in_order){
-            No no = new No();
-            
-            // Condições de parada:
-            if (inicio_in_order > fim_in_order){
-                return null;
-            }
-                
-            no.setConteudo(pre_order[indice++]);
-
-            if (inicio_in_order == fim_in_order){
-                return no;
-            }
-
-            int indice_do_valor = fim_in_order;
-            
-            for (int i = inicio_in_order; i <= fim_in_order; i++){
-                if (in_order[i] == no.getConteudo()){
-                    indice_do_valor = i;
-                    break;
-                }
-            }
-            
-            // Caso recursivo:
-            no.setEsq(construir_arvore(pre_order, in_order, inicio_in_order, indice_do_valor - 1));
-            no.setDir(construir_arvore(pre_order, in_order, indice_do_valor + 1, fim_in_order   ));
-            
-            return no;
-        }
-        
         private No raiz;
 
         public ArvBin(){
@@ -93,7 +57,7 @@ public class Exercicio6 {
         /** Funcao de busca recursiva.
                 Retorna o endereço do elemento se ele for encontrado.
                 Caso contrario, retorna null*/
-        private No busca(No T, int valor) {          
+        private No busca(No T, Tipo valor) {          
                 No aux;
 
                 // Condicao de parada
@@ -115,7 +79,7 @@ public class Exercicio6 {
         /** Buscar um elemento na árvore
                 Retorna o endereço se o elemento for encontrado, 
                 Caso contrário retorna NULL*/
-        public No busca(int valor) {          
+        public No busca(Tipo valor) {          
                 if (vazia())
                         return null;
 
@@ -128,7 +92,7 @@ public class Exercicio6 {
         /** Insere um nó raiz em uma árvore vazia 
                 Retorna true se a inserção for com sucesso.
                 Caso contrário, retorna false */   
-        public boolean insereRaiz(int valor) {   
+        public boolean insereRaiz(Tipo valor) {   
                 if (raiz != null) 
                         return false;  //Erro: Arvore não está vazia
 
@@ -144,7 +108,7 @@ public class Exercicio6 {
         /** Insere um filho à direita de um dado nó.
                 Retorna true se a inserção for com sucesso,
                 Caso contrário false  */
-        public boolean insereDir(int vPai, int vFilho ) {
+        public boolean insereDir(Tipo vPai, Tipo vFilho ) {
 
                 // Verifica se o elemento já existe
                 No filho = busca(vFilho);
@@ -172,7 +136,7 @@ public class Exercicio6 {
         /** Insere um filho à esquerda de um dado nó.
                 Retorna true se a inserção for com sucesso,
                 Caso contrário false  */
-        public boolean insereEsq(int vPai, int vFilho ) {
+        public boolean insereEsq(Tipo vPai, Tipo vFilho ) {
 
                 // Verifica se o elemento já existe 
                 No filho = busca(vFilho);
@@ -297,49 +261,57 @@ public class Exercicio6 {
     }
     
     public static void main(String[] arguments){
-        try{    
-            ArvBin arvore = new ArvBin();
-            Scanner scan = new Scanner(System.in);
-            String pre_com_espacos, pos_com_espacos, in_com_espacos;
-            String[] pre_sem_espacos, pos_sem_espacos, in_sem_espacos;
-            int numero_elementos;
-            int[] valores_pre_order, valores_in_order;  
-
-            numero_elementos = Integer.parseInt(scan.nextLine());
-            valores_pre_order = new int[numero_elementos];
-            valores_in_order = new int[numero_elementos];
-
-            pre_com_espacos = scan.nextLine();
-            pre_sem_espacos = pre_com_espacos.split(" ");
-            pos_com_espacos = scan.nextLine();
-            pos_sem_espacos = pos_com_espacos.split(" ");
-            in_com_espacos = scan.nextLine();
-            in_sem_espacos = in_com_espacos.split(" ");
-
-            for(int i = 0; i < numero_elementos; i++){
-                valores_pre_order[i] = Integer.parseInt(pre_sem_espacos[i]);
-                valores_in_order[i]  = Integer.parseInt(in_sem_espacos[i]);
-            }
-
-            // Usei primeiro o in order e o pre order para montar montar uma árvore temporário. Em seguida, a raiz
-            // da árvore é trocada pela raiz da árvore temporária
-            arvore.set_raiz(arvore.construir_arvore(valores_pre_order, valores_in_order, 0, numero_elementos - 1));
-
-            // Depois comparo o pos order lançado pela arvore com o post order pego como entrada
-            String pos_order_arvore = arvore.gera_pos_order();
-            //System.out.println(pos_order_arvore);
-
-            // Aqui eu adiciono um espaço pois, pela forma como fiz o return do gera_pos_order, a string em sequência
-            // da pos ordem sempre vem com um espaçoa à mais no início.
-            if(pos_order_arvore.equals(" " + pos_com_espacos)){
-                System.out.print("yes");
-            }else{
-                System.out.print("no");
-            }
-        }catch(Exception e){
-            
-        }
+        // Assim vai dar ruim, vou tentar construir a árvore
+        //Scanner scan = new Scanner(System.in);
+        //char[] caracteres;
+        //String pre_order;
+        //int profundidade_esquerda = 0;
+        //int profundidade_direita  = 0;
+        //int contador_de_l = 0;
+        //boolean subarvore_esquerda = true;
+        //int linhas = Integer.parseInt(scan.nextLine());
+        //
+        //
+        //for(int i = 0; i < linhas; i++){
+        //    pre_order = scan.nextLine();
+        //    caracteres = new char[pre_order.length()];
+        //    
+        //    for(int j = 0; j < caracteres.length; j++){
+        //        if(subarvore_esquerda){
+        //            if(caracteres[j] == 'n'){
+        //                profundidade_esquerda++;
+        //            }else{
+        //            
+        //            }
+        //        }else{
+        //            
+        //        }
+        //        
+        //        
+        //        if(caracteres[j] == 'n'){
+        //            profundidade_esquerda
+        //        }else{
+        //            
+        //        }
+        //    }
+        //}
         
+        // A cada dois l's o ramo se divide
+        Scanner scan = new Scanner(System.in);
+        char[] caracteres;
+        String pre_order;
+        int linhas = Integer.parseInt(scan.nextLine());
+        
+        
+        for(int i = 0; i < linhas; i++){
+            pre_order = scan.nextLine();
+            caracteres = new char[pre_order.length()];
+            
+            for(int j = 0; j < caracteres.length; j++){
+                if(caracteres[j] == 'n'){
+                    
+                }
+            }
+        }
     }
-    
 }
