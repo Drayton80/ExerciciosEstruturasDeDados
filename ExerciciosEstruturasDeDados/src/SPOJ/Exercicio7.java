@@ -10,7 +10,7 @@ public class Exercicio7{
     public static void main(String[] args){
         Scanner scan = new Scanner(System.in);
         int profundidade_auxiliar, numero_de_arvores;
-        int profundidade = 0;
+        int profundidade;
         char[] nos_da_arvore;
         boolean[] sequencia_de_checagens;
 
@@ -21,12 +21,13 @@ public class Exercicio7{
             
             // Se o primeiro for uma folha, profundidade é igual a 0
             if (no.equals("l")) {
-                
+                profundidade = 0;
                 System.out.println(profundidade);
 
             // Se isso não ocorrer, checa qual a profundidade
             }else{
                 profundidade_auxiliar = 0;
+                profundidade = 0;
                 
                 sequencia_de_checagens = new boolean [no.length()];
                 sequencia_de_checagens[0] = true;
