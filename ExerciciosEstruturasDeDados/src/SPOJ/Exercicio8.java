@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 
 public class Exercicio8 {
-    static class ABP {
+    public static class ABP {
         
         static class No {
             private int conteudo;
@@ -162,7 +162,7 @@ public class Exercicio8 {
             
             arvore.insere(valores_entrada);
             
-            out.println(arvore.get_saida());
+            System.out.println(arvore.get_saida());
         }   
     }
 }
