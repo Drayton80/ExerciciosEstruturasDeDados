@@ -28,15 +28,15 @@ class Process:
 
 	def get_return_time(self):
 		# Tempo de retorno é dado pelo tempo em que o processo levou para terminar de executar
-		return time_end - time_arrival
+		return self.time_end - self.time_arrival
 
 	def get_response_time(self):
 		# O tempo de resposta é dado pela diferença entre o tempo em que o processo chegou na
 		# fila de espera e o tempo de sua primeira execução
-		return time_start - time_arrival
+		return self.time_start - self.time_arrival
 
 	def get_waiting_time(self):
-		return time_waiting
+		return self.time_waiting
 
 	def show_info(self):
 		print("ID do Processo =", self.number)
