@@ -80,4 +80,30 @@ print("SJF", "{0:0.1f}".format(mean_return_time), "{0:0.1f}".format(mean_respons
 print("\n\n")
 
 
+# ESCALONADOR DO TIPO ROUND ROBIN:
+for process in process_list_rr:
+	process.show_info()
+
+process_list_rr = scheduler.rr(process_list_rr)
+
+number_of_process = len(process_list_rr)
+
+sum_return_time   = 0
+sum_response_time = 0
+sum_waiting_time  = 0
+
+for process in process_list_rr:
+	process.show_info()
+	sum_return_time   += process.get_return_time()
+	sum_response_time += process.get_response_time()
+	sum_waiting_time  += process.get_waiting_time()	
+
+mean_return_time   = sum_return_time/number_of_process
+mean_response_time = sum_response_time/number_of_process
+mean_waiting_time  = sum_waiting_time/number_of_process
+
+print("RR", "{0:0.1f}".format(mean_return_time), "{0:0.1f}".format(mean_response_time), "{0:0.1f}".format(mean_waiting_time))
+print("\n\n")
+
+
 

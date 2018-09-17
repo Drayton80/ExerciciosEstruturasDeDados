@@ -71,17 +71,19 @@ def fcfs(process_list):
 
 
 def sjf(process_list):
-	process_list_auxiliar = []
+	process_complete_list = []
 	queue = []
-	time = 0
-	total_time = 0
 	cpu = []
+	total_time = 0
+	time = 0
 
 	# Obtém-se o tempo total baseado em todos os tempos de execução fornecidos:
 	for process in process_list:
 		total_time += process.time_remaining
 
-	while(time <= total_time):
+	while(True):
+		# Aqui é checado se há algum processo que está no tempo exato de chegar na fila,
+		# ou seja, se seu tempo de chegada é igual ao tempo atual
 		for i in range(len(process_list)):
 			if(process_list[i].time_arrival == time):
 				queue.append(Process(process_list[i].number, process_list[i].time_arrival, 
@@ -89,31 +91,145 @@ def sjf(process_list):
 					                 process_list[i].time_remaining, process_list[i].time_waiting, 
 					                 process_list[i].running))
 
+				# A cada vez que um novo processo chega é preciso reordenar a fila
+				# para colocar ele na posição correta baseado na sua prioridade de
+				# execução:
 				queue = sorted(queue, key=process_sort_time_remaining)
 
-		if(len(cpu) == 0):
+		# Aqui é colocado um processo na CPU caso ela esteja vazia e a fila possua algum
+		# elemento. Isso serve tanto no inicio da execução quanto quando há espaços vazios
+		# de execução entre processos (um processo termina e o outro apenas executa n unidades
+		# de tempo depois, deixando a CPU ociosa):
+		if(len(cpu) == 0 and len(queue) != 0):
 			cpu.append(queue.pop(0))
 			cpu[0].running = True
-			cpu[0].time_start = time
+			# O tempo de inicio do processo apenas é -1 quando ele ainda não entrou na CPU
+			if(cpu[0].time_start == -1):
+				cpu[0].time_start = time
 
+		# Aqui é definido quando o processo sairá da fila:
 		if(cpu[0].time_remaining == 0):
+			# É salvo o tempo do processo que finalizou:
 			cpu[0].time_end = time
-			process_list_auxiliar.append(cpu.pop())
+			# e ele é retirado da CPU e salvo na lista de processos que já
+			# completaram a sua execução:
+			process_complete_list.append(cpu.pop())
 
+			# Automaticamente o próximo processo na fila é adicionado na CPU,
+			# se não há processos na fila a CPU ficará ociosa
 			if(len(queue) != 0):
 				cpu.append(queue.pop(0))
 				cpu[0].running = True
-				cpu[0].time_start = time	
+				# O tempo de inicio do processo apenas é -1 quando ele ainda não entrou na CPU
+				if(cpu[0].time_start == -1):
+					cpu[0].time_start = time	
 
+		# Se houver algum processo na CPU, seu tempo de execução deve decrementar:
 		if(len(cpu) != 0):
 			cpu[0].time_remaining -= 1
 
+		# Todos os processos fora da CPU que estiverem na fila de espera aumentam
+		# o tempo que define o quanto eles esperaram em espera:
 		for i in range(len(queue)):
-			queue[i].time_waiting += 1 
+			queue[i].time_waiting += 1
+
+		# A lista de processos que completaram apenas fica com o tamanho igual a
+		# lista de processos quando todos os processos terminaram de executar
+		if(len(process_complete_list) == len(process_list)):
+			return process_complete_list 
 
 		time += 1
 
-	return process_list_auxiliar
+
+def rr(process_list):
+	process_complete_list = []
+	queue = []
+	cpu = []
+	total_time = 0
+	quantum = 2
+	time = 0
+
+	# Obtém-se o tempo total baseado em todos os tempos de execução fornecidos:
+	for process in process_list:
+		total_time += process.time_remaining
+
+	while(True):
+		# Aqui é checado se há algum processo que está no tempo exato de chegar na fila,
+		# ou seja, se seu tempo de chegada é igual ao tempo atual
+		for i in range(len(process_list)):
+			if(process_list[i].time_arrival == time):
+				# Não é preciso sequer ordenar a fila de espera, pois cada processo é colocado
+				# no fim dela conforme chega já garantindo que o primeiro a chegar será o primeiro
+				# a ser executado
+				queue.append(Process(process_list[i].number, process_list[i].time_arrival, 
+					                 process_list[i].time_start, process_list[i].time_end, 
+					                 process_list[i].time_remaining, process_list[i].time_waiting, 
+					                 process_list[i].running))
+
+		# Aqui é colocado um processo na CPU caso ela esteja vazia e a fila possua algum
+		# elemento. Isso serve tanto no inicio da execução quanto quando há espaços vazios
+		# de execução entre processos (um processo termina e o outro apenas executa n unidades
+		# de tempo depois, deixando a CPU ociosa):
+		if(len(cpu) == 0 and len(queue) != 0):
+			cpu.append(queue.pop(0))
+			cpu[0].running = True
+			# O tempo de inicio do processo apenas é -1 quando ele ainda não entrou na CPU
+			if(cpu[0].time_start != -1):
+				cpu[0].time_start = time
+
+		# Quando o quantum termina e o tempo de execução do processo na cpu for
+		# diferente de zero, tal processo é retirado na CPU e colocado no final
+		# da fila de espera
+		if(quantum == 0 and cpu[0].time_remaining != 0):
+			# O contador do quantum é reiniciado:
+			quantum = 2
+			# Tira o processo da CPU e coloca-o na fila de espera:
+			queue.append(cpu.pop())
+
+			# Automaticamente o próximo processo na fila é adicionado na CPU,
+			# se não há processos na fila a CPU ficará ociosa
+			if(len(queue) != 0):
+				cpu.append(queue.pop(0))
+				cpu[0].running = True
+				# O tempo de inicio do processo apenas é -1 quando ele ainda não entrou na CPU
+				if(cpu[0].time_start == -1):
+					cpu[0].time_start = time
+
+		# Aqui é definido quando o processo sairá da fila:
+		if(cpu[0].time_remaining == 0):
+			# O contador do quantum é reiniciado:
+			quantum = 2
+			# Salva-se o tempo do processo que finalizou:
+			cpu[0].time_end = time
+			# e ele é retirado da CPU e salvo na lista de processos que já
+			# completaram a sua execução:
+			process_complete_list.append(cpu.pop())
+
+			# Automaticamente o próximo processo na fila é adicionado na CPU,
+			# se não há processos na fila a CPU ficará ociosa
+			if(len(queue) != 0):
+				cpu.append(queue.pop(0))
+				cpu[0].running = True
+				# O tempo de inicio do processo apenas é -1 quando ele ainda não entrou na CPU
+				if(cpu[0].time_start == -1):
+					cpu[0].time_start = time	
+
+		# Se houver algum processo na CPU, seu tempo de execução deve decrementar:
+		if(len(cpu) != 0):
+			cpu[0].time_remaining -= 1
+			quantum -= 1
+
+		# Todos os processos fora da CPU que estiverem na fila de espera aumentam
+		# o tempo que define o quanto eles esperaram em espera:
+		for i in range(len(queue)):
+			queue[i].time_waiting += 1
+
+		# A lista de processos que completaram apenas fica com o tamanho igual a
+		# lista de processos quando todos os processos terminaram de executar
+		if(len(process_complete_list) == len(process_list)):
+			return process_complete_list 
+
+		time += 1
 
 
 
