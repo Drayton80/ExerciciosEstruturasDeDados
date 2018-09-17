@@ -58,7 +58,7 @@ print("\n\n")
 for process in process_list_sjf:
 	process.show_info()
 
-scheduler.sjf(process_list_sjf)
+process_list_sjf = scheduler.sjf(process_list_sjf)
 
 number_of_process = len(process_list_sjf)
 
