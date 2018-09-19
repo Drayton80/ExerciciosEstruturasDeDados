@@ -17,6 +17,7 @@
 ''"    running: define se está ou não em execução
 '''
 class Process:
+	# Construtor da Classe:
 	def __init__(self, number, time_arrival, time_start, time_end, time_remaining, time_waiting, running):
 		self.number = number
 		self.time_arrival = time_arrival
@@ -26,18 +27,22 @@ class Process:
 		self.time_waiting = time_waiting
 		self.running = running
 
+	# Tempo de Retorno do processo:
 	def get_return_time(self):
 		# Tempo de retorno é dado pelo tempo em que o processo levou para terminar de executar
 		return self.time_end - self.time_arrival
 
+	# Tempo de Resposta do processo:
 	def get_response_time(self):
 		# O tempo de resposta é dado pela diferença entre o tempo em que o processo chegou na
 		# fila de espera e o tempo de sua primeira execução
 		return self.time_start - self.time_arrival
 
+	# Tempo de Espera do processo:
 	def get_waiting_time(self):
 		return self.time_waiting
 
+	# Print de testes:
 	def show_info(self):
 		print("ID do Processo =", self.number)
 		print("time_arrival =", self.time_arrival)
