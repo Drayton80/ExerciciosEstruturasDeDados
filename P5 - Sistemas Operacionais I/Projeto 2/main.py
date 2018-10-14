@@ -1,104 +1,39 @@
-from process import Process
-import schedulers
+import pagesubstitution
 
+# Define as listas de páginas para cada algoritmo de substituição de páginas:
+list_pages = []
 
-print("")
-print("Certifique-se que o arquivo a ser lido esteja no formato txt e inserido no diretório inputs")
-file_name = input("Informe o nome do arquivo que será executado: ")
-print("")
+# Define o número de quadros da RAM que serão utilizados:
+memory_frames = 0
 
-
-process_list_fcfs = []
-process_list_sjf  = []
-process_list_rr   = []
 
 # MANIPULAÇÃO DO ARQUIVO:
-with open('inputs/{0}.txt'.format(file_name), 'r') as file_text:
+with open('inputs/test2.txt', 'r') as file_text:
 	# Separa o arquivo em linhas e salva elas em uma lista
-	lines = file_text.read().splitlines()
+	file_lines = file_text.read().splitlines()
 
-	process_id = 1
+	# Define quando for a primeira linha
+	first_line = True
 
-	# Separa as linhas por espaço para obter os números relativos à cada processo
-	for line in lines:
-		# Separa cada linha em uma lista de números dela:
-		line = line.split()
-
-		# Obtém-se aqui os tempos de chegada e restante:
-		time_arrival = int(line[0])
-		time_remaining = int(line[1])
-
-		# Cria uma lista de processos baseada nos elementos obtidos do arquivo de
-		# entrada:
-		process_list_fcfs.append(Process(process_id, time_arrival, -1, -1, time_remaining, 0, False))
-		process_list_sjf.append(Process(process_id, time_arrival, -1, -1, time_remaining, 0, False))
-		process_list_rr.append(Process(process_id, time_arrival, -1, -1, time_remaining, 0, False))
-
-		process_id += 1
+	# Separa as linhas por espaço para obter os números relativos à cada página
+	for line in file_lines:
+		# A primeira linha das entradas define o número de quadros que será disponibilizados para uso:
+		if (first_line):
+			# Salva o número de quadros:
+			memory_frames = int(line)
+			# Indica que já se passou da primeira linha:
+			first_line = False
+		else:
+			# Preenche as listas com o número das páginas obtidos no arquivo de entradas:
+			list_pages.append(int(line))
 
 
-# ESCALONADOR DO TIPO FCFS:
-process_list_fcfs = schedulers.fcfs(process_list_fcfs)
+# ALGORITMO DE SUBSTITUIÇÃO DE PÁGINAS DO TIPO FIFO:
+# Valor que define a quantidade de falta de páginas:
+missing_pages = pagesubstitution.fifo(list_pages, memory_frames)
+print("FIFO", missing_pages)
 
-number_of_process = len(process_list_fcfs)
-
-sum_return_time   = 0
-sum_response_time = 0
-sum_waiting_time  = 0
-
-for process in process_list_fcfs:
-	#process.show_info()
-	sum_return_time   += process.get_return_time()
-	sum_response_time += process.get_response_time()
-	sum_waiting_time  += process.get_waiting_time()	
-
-mean_return_time   = sum_return_time/number_of_process
-mean_response_time = sum_response_time/number_of_process
-mean_waiting_time  = sum_waiting_time/number_of_process
-
-print("FCFS", "{0:0.1f}".format(mean_return_time), "{0:0.1f}".format(mean_response_time), "{0:0.1f}".format(mean_waiting_time))
-
-# ESCALONADOR DO TIPO SJF:
-process_list_sjf = schedulers.sjf(process_list_sjf)
-
-number_of_process = len(process_list_sjf)
-
-sum_return_time   = 0
-sum_response_time = 0
-sum_waiting_time  = 0
-
-for process in process_list_sjf:
-	#process.show_info()
-	sum_return_time   += process.get_return_time()
-	sum_response_time += process.get_response_time()
-	sum_waiting_time  += process.get_waiting_time()	
-
-mean_return_time   = sum_return_time/number_of_process
-mean_response_time = sum_response_time/number_of_process
-mean_waiting_time  = sum_waiting_time/number_of_process
-
-print("SJF", "{0:0.1f}".format(mean_return_time), "{0:0.1f}".format(mean_response_time), "{0:0.1f}".format(mean_waiting_time))
-
-# ESCALONADOR DO TIPO ROUND ROBIN:
-process_list_rr = schedulers.rr(process_list_rr)
-
-number_of_process = len(process_list_rr)
-
-sum_return_time   = 0
-sum_response_time = 0
-sum_waiting_time  = 0
-
-for process in process_list_rr:
-	#process.show_info()
-	sum_return_time   += process.get_return_time()
-	sum_response_time += process.get_response_time()
-	sum_waiting_time  += process.get_waiting_time()	
-
-mean_return_time   = sum_return_time/number_of_process
-mean_response_time = sum_response_time/number_of_process
-mean_waiting_time  = sum_waiting_time/number_of_process
-
-print("RR", "{0:0.1f}".format(mean_return_time), "{0:0.1f}".format(mean_response_time), "{0:0.1f}".format(mean_waiting_time))
-
-
-
+# ALGORITMO DE SUBSTITUIÇÃO DE PÁGINAS DO TIPO ÓTIMO:
+# Valor que define a quantidade de falta de páginas:
+missing_pages = pagesubstitution.otm(list_pages, memory_frames)
+print("OTM", missing_pages)
