@@ -4,11 +4,11 @@ import pagesubstitution
 list_pages = []
 
 # Define o número de quadros da RAM que serão utilizados:
-memory_frames = 0
+memory_frames_size = 0
 
 
 # MANIPULAÇÃO DO ARQUIVO:
-with open('inputs/test2.txt', 'r') as file_text:
+with open('inputs/test.txt', 'r') as file_text:
 	# Separa o arquivo em linhas e salva elas em uma lista
 	file_lines = file_text.read().splitlines()
 
@@ -20,7 +20,7 @@ with open('inputs/test2.txt', 'r') as file_text:
 		# A primeira linha das entradas define o número de quadros que será disponibilizados para uso:
 		if (first_line):
 			# Salva o número de quadros:
-			memory_frames = int(line)
+			memory_frames_size = int(line)
 			# Indica que já se passou da primeira linha:
 			first_line = False
 		else:
@@ -30,10 +30,15 @@ with open('inputs/test2.txt', 'r') as file_text:
 
 # ALGORITMO DE SUBSTITUIÇÃO DE PÁGINAS DO TIPO FIFO:
 # Valor que define a quantidade de falta de páginas:
-missing_pages = pagesubstitution.fifo(list_pages, memory_frames)
+missing_pages = pagesubstitution.fifo(list_pages, memory_frames_size)
 print("FIFO", missing_pages)
 
 # ALGORITMO DE SUBSTITUIÇÃO DE PÁGINAS DO TIPO ÓTIMO:
 # Valor que define a quantidade de falta de páginas:
-missing_pages = pagesubstitution.otm(list_pages, memory_frames)
+missing_pages = pagesubstitution.otm(list_pages, memory_frames_size)
 print("OTM", missing_pages)
+
+# ALGORITMO DE SUBSTITUIÇÃO DE PÁGINAS DO TIPO LRU:
+# Valor que define a quantidade de falta de páginas:
+missing_pages = pagesubstitution.lru(list_pages, memory_frames_size)
+print("LRU", missing_pages)
