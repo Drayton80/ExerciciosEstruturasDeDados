@@ -1,0 +1,7 @@
+Elite dos Trogloditas |{
+	Troglodita das Selvas - Mago da Guerra (Nível 1): 
+	Informações: ND: 2; Humanoide (Médio, Réptil); DV: 2d8 + 1d6; 14 PV; Iniciativa: +5 (Des, Inic. Aprimorada); Deslocamento 9m; CA: 19, toque 11, surpresa 18; Atq Base +1, Agr +1; Ataques e Atq. Total: Corpo a Corpo: garra +1 (dano: 1d4), À Distância: cajado desgastado +3 (dano: 1d6+1 até 9m, x2, 9m, 20 disparos); Armadura: Armadura de Couro (+2 CA, 0 de Falha); Espaço/Alcance: 1,5m/1,5m; Ataques Especiais: Mau-cheiro; Qualidades Especiais: Visão no escuro 18m; Tendência: CM; Testes de Resistência: Fortitude: +3, Reflexos: +1, Vontade: +2; Habilidades: For 8 (-1), Des 12 (+1), Con 10 (+0), Int 15 (+2), Sab 10 (+0), Car 12 (+1).
+
+	Troglodita das Selvas - Mago da Guerra (Nível 1): 
+	Informações: ND: 2; Humanoide (Médio, Réptil); DV: 2d8 + 1d6; 14 PV; Iniciativa: +5 (Des, Inic. Aprimorada); Deslocamento 9m; CA: 19, toque 11, surpresa 18; Atq Base +1, Agr +1; Ataques e Atq. Total: Corpo a Corpo: garra +1 (dano: 1d4), À Distância: cajado desgastado +3 (dano: 1d6+1 até 9m, x2, 9m, 20 disparos); Armadura: Armadura de Couro (+2 CA, 0 de Falha); Espaço/Alcance: 1,5m/1,5m; Ataques Especiais: Mau-cheiro; Qualidades Especiais: Visão no escuro 18m; Tendência: CM; Testes de Resistência: Fortitude: +3, Reflexos: +1, Vontade: +2; Habilidades: For 8 (-1), Des 12 (+1), Con 10 (+0), Int 15 (+2), Sab 10 (+0), Car 12 (+1).	
+}|
