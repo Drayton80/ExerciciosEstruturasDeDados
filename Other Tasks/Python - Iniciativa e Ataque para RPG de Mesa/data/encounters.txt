@@ -1,7 +1,15 @@
-Elite dos Trogloditas |{
-	Troglodita das Selvas - Mago da Guerra (NÃ­vel 1): 
-	InformaÃ§Ãµes: ND: 2; Humanoide (MÃ©dio, RÃ©ptil); DV: 2d8 + 1d6; 14 PV; Iniciativa: +5 (Des, Inic. Aprimorada); Deslocamento 9m; CA: 19, toque 11, surpresa 18; Atq Base +1, Agr +1; Ataques e Atq. Total: Corpo a Corpo: garra +1 (dano: 1d4), Ã€ DistÃ¢ncia: cajado desgastado +3 (dano: 1d6+1 atÃ© 9m, x2, 9m, 20 disparos); Armadura: Armadura de Couro (+2 CA, 0 de Falha); EspaÃ§o/Alcance: 1,5m/1,5m; Ataques Especiais: Mau-cheiro; Qualidades Especiais: VisÃ£o no escuro 18m; TendÃªncia: CM; Testes de ResistÃªncia: Fortitude: +3, Reflexos: +1, Vontade: +2; Habilidades: For 8 (-1), Des 12 (+1), Con 10 (+0), Int 15 (+2), Sab 10 (+0), Car 12 (+1).
+Tropas do Refúgio: |{
+Infantaria – Guerreiro(a) (Nível 1): 
+Descrição: Um(a) jovem trajando uma armadura de couro que possuí uma espécie de camuflagem improvisada com tinta verde e algumas folhas pregadas e portando uma espada longa em uma mão, uma adaga na outra.
+Elfo(a):
+Informações: ND: 1; Elfo(a) (Médio); DV: 1d10 + 1; 11 PV; Iniciativa: +1 (Des); Deslocamento 9m; CA: 14, toque 12, surpresa 12; Atq Base +1, Agr +3; Ataques: Corpo a Corpo: espada élfica de lâmina fina (elven thinblade, Races of the Wild pág. 166) +4 (dano: 1d8+2, 18-20/x2); Ataque Total: espada élfica de lâmina fina +2 (dano: 1d8+2, 18-20/x2) e adaga +1 (dano: 1d4+1, 19-20/x2); Armadura: Armadura de Couro (+2 CA, +6 de Des, 0 de Falha); Espaço/Alcance: 1,5m/1,5m; Tendência: LN; Testes de Resistência: Fortitude: +3, Reflexos: +2, Vontade: +0; Habilidades: For 14 (+2), Des 15 (+2), Con 12 (+1), Int 15 (+2), Sab 11 (+0), Car 12 (+1).
+Perícias: Intimidar +5, Ouvir +6, Observar +5, Procurar +2, Sentir Motivação +2; 
+Talentos: Foco em Arma (Espada Élfica de Lâmina Fina) e Combater com Duas Armas.
 
-	Troglodita das Selvas - Mago da Guerra (NÃ­vel 1): 
-	InformaÃ§Ãµes: ND: 2; Humanoide (MÃ©dio, RÃ©ptil); DV: 2d8 + 1d6; 14 PV; Iniciativa: +5 (Des, Inic. Aprimorada); Deslocamento 9m; CA: 19, toque 11, surpresa 18; Atq Base +1, Agr +1; Ataques e Atq. Total: Corpo a Corpo: garra +1 (dano: 1d4), Ã€ DistÃ¢ncia: cajado desgastado +3 (dano: 1d6+1 atÃ© 9m, x2, 9m, 20 disparos); Armadura: Armadura de Couro (+2 CA, 0 de Falha); EspaÃ§o/Alcance: 1,5m/1,5m; Ataques Especiais: Mau-cheiro; Qualidades Especiais: VisÃ£o no escuro 18m; TendÃªncia: CM; Testes de ResistÃªncia: Fortitude: +3, Reflexos: +1, Vontade: +2; Habilidades: For 8 (-1), Des 12 (+1), Con 10 (+0), Int 15 (+2), Sab 10 (+0), Car 12 (+1).	
-}|
+Infantaria – Guerreiro(a) (Nível 2): 
+Descrição: Um(a) jovem trajando uma armadura de couro que possuí uma espécie de camuflagem improvisada com tinta verde e algumas folhas pregadas e portando uma espada longa em uma mão, uma adaga na outra.
+Elfo(a):
+Informações: ND: 1; Elfo(a) (Médio); DV: 1d10 + 1; 11 PV; Iniciativa: +1 (Des); Deslocamento 9m; CA: 14, toque 12, surpresa 12; Atq Base +1, Agr +3; Ataques: Corpo a Corpo: espada élfica de lâmina fina (elven thinblade, Races of the Wild pág. 166) +4 (dano: 1d8+2, 18-20/x2); Ataque Total: espada élfica de lâmina fina +2 (dano: 1d8+2, 18-20/x2) e adaga +1 (dano: 1d4+1, 19-20/x2); Armadura: Armadura de Couro (+2 CA, +6 de Des, 0 de Falha); Espaço/Alcance: 1,5m/1,5m; Tendência: LN; Testes de Resistência: Fortitude: +3, Reflexos: +2, Vontade: +0; Habilidades: For 14 (+2), Des 15 (+2), Con 12 (+1), Int 15 (+2), Sab 11 (+0), Car 12 (+1).
+Perícias: Intimidar +5, Ouvir +6, Observar +5, Procurar +2, Sentir Motivação +2; 
+Talentos: Foco em Arma (Espada Élfica de Lâmina Fina) e Combater com Duas Armas.
+|}

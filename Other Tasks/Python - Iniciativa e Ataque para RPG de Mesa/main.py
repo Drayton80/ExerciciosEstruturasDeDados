@@ -1,3 +1,5 @@
+# Nota: para o cmd do windowns, rodar o comando chcp1252
+
 import os
 import re
 
@@ -22,8 +24,8 @@ def update_characters(characters):
 			list.pop()
 
 		for line in file:
-			line = re.sub("\n|\t", "", line)
-			characters.append(line.split(" "))
+			character = re.sub("\n|\t", "", line)
+			characters.append(character.split(" "))
 
 while True:
 	divide_screen()
@@ -51,52 +53,63 @@ while True:
 	elif selected is '1':
 		roll_initiatives = True
 
-		with open("data/encounters.txt", "r") as file:
-			while roll_initiatives is True:
-				# É exibido a primeira opção antes da lista de encontros:
-				print("0 - Voltar")
+		
+		while roll_initiatives is True:
+			# É exibido a primeira opção antes da lista de encontros:
+			print("0 - Voltar")
 
-				encounters_title = ""
+			encounters_title = ""
 
-				i = 1
+			i = 1
 
-				# Aqui é feito print de todos os encontros que podem ser selecionados
-				# para haver a rolagem de iniciativas	
+			# Aqui é feito print de todos os encontros que podem ser selecionados
+			# para haver a rolagem de iniciativas	
+			with open("data/encounters.txt", "r") as file:
 				for line in file:
 					if symbol_encounter_start() in line:
-						# line.replace("|{", " ")
+						line = line.replace("|{", " ")
 						encounters_title += str(i) + " - Encontro: " + line + "\n"
 						i += 1
 
-				selected_initiative = input(encounters_title)
+			# Aqui é pego o input do teclado relativo a escolha do usuário:
+			selected_initiative = input(encounters_title)
 
-				if selected_initiative is '0':
-					roll_initiatives = False
+			# Se a escolha for 0 significará que ele quer voltar para o menu inicial:
+			if selected_initiative is '0':
+				roll_initiatives = False
 
-				elif selected_initiative.isdigit():
-					encounter_creatures_index = 0
-					encounter_creatures = []
-					encounter_selected = int(selected_initiative)
-					encounter_index = 1
-					encounter_found = False
+			# Se a escolha for um dígito inteiro válido procura-se o encontro relativo
+			# ao inteiro colocado como entrada:
+			elif selected_initiative.isdigit():
+				encounter_creatures = []
+				encounter_selected = int(selected_initiative)
+				encounter_index = 1
+				encounter_found = False
+				creature_information = ""
 
+				with open("data/encounters.txt", "r") as file:
 					for line in file:
 						# Encontra-se o encontro o qual está sendo procurando:
 						if encounter_found is False:
-							if symbol_encounter_start in line:
+							if symbol_encounter_start() in line:
 								if encounter_selected == encounter_index:
 									encounter_found = True
 								else:
 									encounter_index += 1
 						# Caso o encontro seja encontrado, ele é salvo numa lista:
 						else:
-							if symbol_creature_start() in line:
+							# Se a linha não possuir nada escrito nela, ou seja, se
+							# ela estiver vazia:
+							if not line.strip():
+								# A criatura anterior é salva e
+								encounter_creatures.append(creature_information)
+								# limpa o string de informações da criatura para poder
+								# começar a salvar uma nova:
 								creature_information = ""
-							elif symbol_creature_end() in line:
-								encounter_creatures[encounter_creatures_index].append(creature_information)
-								encounter_creatures_index += 1
 							else:
 								creature_information += line + "\n"
+
+					print(encounter_creatures)
 
 
 	elif selected is '2':
