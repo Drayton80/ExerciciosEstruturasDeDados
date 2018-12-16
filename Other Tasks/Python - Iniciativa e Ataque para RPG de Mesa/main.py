@@ -4,21 +4,7 @@ import os
 import re
 import tkinter as tk
 
-
-def symbol_encounter_start():
-	return "|{"
-
-def symbol_encounter_end():
-	return "}|"
-
-def symbol_creature_start():
-	return "|["
-
-def symbol_creature_end():
-	return "]|"
-
-def divide_screen():
-	print("\n||------------------------------------------------------------||\n")
+encounters_saved = []
 
 def update_characters(characters):
 	with open("data/characters.txt", "r") as file:
@@ -29,35 +15,113 @@ def update_characters(characters):
 			character = re.sub("\n|\t", "", line)
 			characters.append(character.split(" "))
 
+def update_information():
+	listbox_encounters.delete(0, tk.END)
 
-button_x = 25
-button_y = 25
-button_margin = 10
+	with open("data/encounters.txt", "r") as file:
+		i = 0
+		single_encounter = []
+		single_creature = ""
+		previous_line = ""
+		encounter_end = False
+
+		for line in file:
+			if (i == 0):
+				encounter_title = str(i+1) + "º - Encontro: " + line
+				listbox_encounters.insert(tk.END, encounter_title)
+
+				single_encounter.append(line)
+
+				i += 1
+
+			else:
+				# Se o encontro acabou na linha passada, é salvo o título do próximo encontro:
+				if encounter_end is True:
+					encounter_title = str(i+1) + "º - Encontro: " + line
+					listbox_encounters.insert(tk.END, encounter_title)
+
+					single_encounter.append(line)
+
+					encounter_end = False
+					i += 1
+
+				# Se ambas as linhas, atual e anterior, estiverem vazias, significará
+				# que o encontro acabou:
+				if (not line.strip() and not previous_line.strip()):
+					encounters_saved.append(single_encounter)
+					single_encounter = []
+					encounter_end = True
+				# Se apenas a atual estiver vazia, significa que a descrição de uma criatura acabou:
+				elif (not line.strip()):
+					single_encounter.append(single_creature)
+					single_creature = ""
+				# Se não for nenhuma das anteriores, significará que a criatura ainda está sendo descrita:
+				else:
+					single_creature += line
+
+			# Salva o conteúdo da linha anterior:
+			previous_line = line
+
+		listbox_information.delete(0, tk.END)
+
+		for element in encounters_saved:
+			text = ""
+
+			for lines in element:
+				divide = lines.split("\n")
+
+				for single in divide:
+					listbox_information.insert(tk.END, single)
+
+			
+
+encounters_title   = []
 button_width = 20
 
 root = tk.Tk()
 
-scrollbar = tk.Scrollbar(root)
-listbox = tk.Listbox(root)
+# WIDGETS CREATION:
+# scroll bar:
+scrollbar_encounters  = tk.Scrollbar(root)
+scrollbar_information = tk.Scrollbar(root)
+scrollbar_roll        = tk.Scrollbar(root)
+# list box:
+listbox_encounters  = tk.Listbox(root)
+listbox_information = tk.Listbox(root)
+listbox_roll        = tk.Listbox(root)
+# button:
+button_update_information = tk.Button(root, width=button_width, text="Atualizar Informações", 
+                                          command=update_information)
+button_select_encounter   = tk.Button(root, width=button_width, text="Selecionar Encontro")
+button_roll_dices         = tk.Button(root, width=button_width, text="Rolar Dados de Iniciativa e Ataque")
 
-button_initiative_file = tk.Button(root, width=button_width, text="Iniciativa por Arquivo")
-#button_initiative_file.place(x=button_x, y=button_y)
-button_exit = tk.Button(root, width=button_width, text="Sair")
-#button_exit.place(x=button_x, y=button_y*2+button_margin)
+# LAYOUT ORGANIZATION:
+# top buttons:
+button_update_information.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
+button_select_encounter.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
+button_roll_dices.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
+# lists and scroll bars:
+scrollbar_encounters.pack(side=tk.RIGHT, fill=tk.Y)
+listbox_encounters.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+scrollbar_information.pack(side=tk.RIGHT,  fill=tk.Y)
+listbox_information.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+scrollbar_roll.pack(side=tk.RIGHT, fill=tk.Y)
+listbox_roll.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-button_initiative_file.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
-button_exit.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
-scrollbar.pack(side=tk.RIGHT, anchor=tk.N, fill=tk.Y)
-listbox.pack(fill=tk.BOTH, expand=1)
+# LISTBOX AND SCROLL BAR HITCHING:
+# list box:
+listbox_encounters.config(yscrollcommand=scrollbar_encounters.set)
+listbox_information.config(yscrollcommand=scrollbar_information.set)
+listbox_roll.config(yscrollcommand=scrollbar_roll.set)
+# scroll bar:
+scrollbar_encounters.config(command=listbox_encounters.yview)
+scrollbar_information.config(command=listbox_information.yview)
+scrollbar_roll.config(command=listbox_roll.yview)
 
-for i in range(500):
-	text = "text" + str(i)
-	listbox.insert(tk.END, text)
+# 
+update_information()
 
-listbox.config(yscrollcommand=scrollbar.set)
-scrollbar.config(command=listbox.yview)
-
-
+# SCREEN DEFINITIONS:
 root.geometry("1360x920")
 root.title("Auxiliar RPG")
 root.mainloop()
