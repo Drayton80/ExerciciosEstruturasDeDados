@@ -2,6 +2,8 @@
 
 import os
 import re
+import tkinter as tk
+
 
 def symbol_encounter_start():
 	return "|{"
@@ -27,6 +29,40 @@ def update_characters(characters):
 			character = re.sub("\n|\t", "", line)
 			characters.append(character.split(" "))
 
+
+button_x = 25
+button_y = 25
+button_margin = 10
+button_width = 20
+
+root = tk.Tk()
+
+scrollbar = tk.Scrollbar(root)
+listbox = tk.Listbox(root)
+
+button_initiative_file = tk.Button(root, width=button_width, text="Iniciativa por Arquivo")
+#button_initiative_file.place(x=button_x, y=button_y)
+button_exit = tk.Button(root, width=button_width, text="Sair")
+#button_exit.place(x=button_x, y=button_y*2+button_margin)
+
+button_initiative_file.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
+button_exit.pack(side=tk.TOP, anchor=tk.W, fill=tk.X)
+scrollbar.pack(side=tk.RIGHT, anchor=tk.N, fill=tk.Y)
+listbox.pack(fill=tk.BOTH, expand=1)
+
+for i in range(500):
+	text = "text" + str(i)
+	listbox.insert(tk.END, text)
+
+listbox.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=listbox.yview)
+
+
+root.geometry("1360x920")
+root.title("Auxiliar RPG")
+root.mainloop()
+
+'''
 while True:
 	divide_screen()
 
@@ -117,3 +153,4 @@ while True:
 	elif selected is 'C' or 'c':
 		print('Personagens no Arquivo:')
 		print(characters, "\n")
+'''
