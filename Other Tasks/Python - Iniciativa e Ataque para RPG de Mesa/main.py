@@ -1,21 +1,15 @@
-# Nota: para o cmd do windowns, rodar o comando chcp1252
-
 import os
 import re
 import tkinter as tk
 
+from encounter import Encounter
+
+
 encounters_saved = []
+encounter_selected = Encounter("", "")
 
-def update_characters(characters):
-	with open("data/characters.txt", "r") as file:
-		for _ in range(len(characters)):
-			list.pop()
 
-		for line in file:
-			character = re.sub("\n|\t", "", line)
-			characters.append(character.split(" "))
-
-def update_information():
+def update_information_old():
 	listbox_encounters.delete(0, tk.END)
 
 	with open("data/encounters.txt", "r") as file:
@@ -40,8 +34,6 @@ def update_information():
 					encounter_title = str(i+1) + "º - Encontro: " + line
 					listbox_encounters.insert(tk.END, encounter_title)
 
-					single_encounter.append(line)
-
 					encounter_end = False
 					i += 1
 
@@ -62,18 +54,146 @@ def update_information():
 			# Salva o conteúdo da linha anterior:
 			previous_line = line
 
+			
+def select_encounter_old():
+	# Define o índice do encontro que será exibido baseado no que foi selecionado
+	# na list box dos encontros. Nada acontece caso não tenha sido feito a seleção
+	if listbox_encounters.curselection():
+		selected = listbox_encounters.curselection()
+		encounter_index = selected[0]
+
+		encounter_selected = encounters_saved[encounter_index]
+
 		listbox_information.delete(0, tk.END)
 
-		for element in encounters_saved:
-			text = ""
+		# Esse for serve para formatar o texto do encontro de tal forma a ficar corretamente
+		# disposto linha a linha no listbox sem ultrapassar um certo limite horizontal
+		for element in encounter_selected:
+			# Define o número máximo de palavras que uma linha pode ter:
+			max_line_size = 40
 
-			for lines in element:
-				divide = lines.split("\n")
+			lines = element.split("\n")
 
-				for single in divide:
-					listbox_information.insert(tk.END, single)
+			for line in lines:
+				words = line.split(" ")
 
-			
+				# Se o tamanho do parágrafo exceder o número máximo de palavras permitida,
+				# é organizado para que apenas haja no máximo um número n de palavras por linha:
+				if len(words) > max_line_size:
+					text_size = 0
+					text = ""
+
+					for word in words:
+						# Se o tamanho do texto for igual ao tamanho máximo, é impresso o
+						# texto atual no listbox, o conteúdo do texto é apagado e o tamanho 
+						# atual do texto retorna ao valor inicial, que é 0
+						if text_size == max_line_size:
+							listbox_information.insert(tk.END, text)
+							text_size = 0
+							text = ""
+						# As palavras são adicionadas ao texto enquanto o tamanho máximo
+						# não for alcançado:
+						else:
+							text += word + " "
+
+						text_size += 1
+
+				# Caso contrário, exibe-se normalmente no listbox o conteúdo da linha
+				else:
+					listbox_information.insert(tk.END, line)
+
+
+def update_information():
+	listbox_encounters.delete(0, tk.END)
+
+	with open("data/encounters.txt", "r") as file:
+		i = 0
+		creature = ""
+		creatures = []
+		previous_line = ""
+		encounter_end = False
+
+		for line in file:
+			if (i == 0): 
+				listbox_encounters.insert(tk.END, str(i+1) + "º - Encontro: " + line)
+
+				title = line
+				i += 1
+
+			else:
+				# Se o encontro acabou na linha passada, é salvo o título do próximo encontro:
+				if encounter_end is True:
+					listbox_encounters.insert(tk.END, str(i+1) + "º - Encontro: " + line)
+
+					title = line
+					encounter_end = False
+					i += 1
+				# Se ambas as linhas, atual e anterior, estiverem vazias, significará
+				# que o encontro acabou:
+				elif (not line.strip() and not previous_line.strip()):
+					encounters_saved.append(Encounter(title, creatures))
+					encounter_end = True
+					creatures = []
+				# Se apenas a atual estiver vazia, significa que a descrição de uma criatura acabou:
+				elif (not line.strip()):
+					creatures.append(creature)
+					creature = ""
+				# Se não for nenhuma das anteriores, significará que a criatura ainda está sendo descrita:
+				else:
+					creature += line
+
+			# Salva o conteúdo da linha anterior:
+			previous_line = line
+
+
+def select_encounter():
+	# Define o índice do encontro que será exibido baseado no que foi selecionado
+	# na list box dos encontros. Nada acontece caso não tenha sido feito a seleção
+	if listbox_encounters.curselection():
+		selected = listbox_encounters.curselection()
+		encounter_index = selected[0]
+
+		encounter_selected = encounters_saved[encounter_index]
+
+		listbox_information.delete(0, tk.END)
+		listbox_information.insert(tk.END, encounter_selected.get_title())
+
+		# Esse for serve para formatar o texto do encontro de tal forma a ficar corretamente
+		# disposto linha a linha no listbox sem ultrapassar um certo limite horizontal
+		for creature in encounter_selected.get_creatures():
+			# Define o número máximo de palavras que uma linha pode ter:
+			max_line_size = 35
+
+			lines = creature.split("\n")
+
+			for line in lines:
+				words = line.split(" ")
+
+				# Se o tamanho do parágrafo exceder o número máximo de palavras permitida,
+				# é organizado para que apenas haja no máximo um número n de palavras por linha:
+				if len(words) > max_line_size:
+					text_size = 0
+					text = ""
+
+					for word in words:
+						# Se o tamanho do texto for igual ao tamanho máximo, é impresso o
+						# texto atual no listbox, o conteúdo do texto é apagado e o tamanho 
+						# atual do texto retorna ao valor inicial, que é 0
+						if text_size == max_line_size:
+							listbox_information.insert(tk.END, text)
+							text_size = 0
+							text = ""
+						# As palavras são adicionadas ao texto enquanto o tamanho máximo
+						# não for alcançado:
+						else:
+							text += word + " "
+
+						text_size += 1
+
+				# Caso contrário, exibe-se normalmente no listbox o conteúdo da linha
+				else:
+					listbox_information.insert(tk.END, line)
+
 
 encounters_title   = []
 button_width = 20
@@ -91,8 +211,9 @@ listbox_information = tk.Listbox(root)
 listbox_roll        = tk.Listbox(root)
 # button:
 button_update_information = tk.Button(root, width=button_width, text="Atualizar Informações", 
-                                          command=update_information)
-button_select_encounter   = tk.Button(root, width=button_width, text="Selecionar Encontro")
+                                            command=update_information)
+button_select_encounter   = tk.Button(root, width=button_width, text="Selecionar Encontro",
+                                            command=select_encounter)
 button_roll_dices         = tk.Button(root, width=button_width, text="Rolar Dados de Iniciativa e Ataque")
 
 # LAYOUT ORGANIZATION:
@@ -125,96 +246,3 @@ update_information()
 root.geometry("1360x920")
 root.title("Auxiliar RPG")
 root.mainloop()
-
-'''
-while True:
-	divide_screen()
-
-	characters = []
-
-	selected = input("Escolha uma das 3 Opções Abaixo:" +
-                     "\n  0 - Sair"                     +
-                     "\n  1 - Iniciativa por Arquivo"   +
-                     "\n  2 - Ataque e Dano por Arquivo"+
-                     "\n  C - Mostrar Personagens\n  "  )
-
-
-	if not os.path.exists('data'):
-		os.makedirs("data")
-
-	update_characters(characters)
-
-	divide_screen()
-
-
-	if selected is '0':
-		break
-
-	elif selected is '1':
-		roll_initiatives = True
-
-		
-		while roll_initiatives is True:
-			# É exibido a primeira opção antes da lista de encontros:
-			print("0 - Voltar")
-
-			encounters_title = ""
-
-			i = 1
-
-			# Aqui é feito print de todos os encontros que podem ser selecionados
-			# para haver a rolagem de iniciativas	
-			with open("data/encounters.txt", "r") as file:
-				for line in file:
-					if symbol_encounter_start() in line:
-						line = line.replace("|{", " ")
-						encounters_title += str(i) + " - Encontro: " + line + "\n"
-						i += 1
-
-			# Aqui é pego o input do teclado relativo a escolha do usuário:
-			selected_initiative = input(encounters_title)
-
-			# Se a escolha for 0 significará que ele quer voltar para o menu inicial:
-			if selected_initiative is '0':
-				roll_initiatives = False
-
-			# Se a escolha for um dígito inteiro válido procura-se o encontro relativo
-			# ao inteiro colocado como entrada:
-			elif selected_initiative.isdigit():
-				encounter_creatures = []
-				encounter_selected = int(selected_initiative)
-				encounter_index = 1
-				encounter_found = False
-				creature_information = ""
-
-				with open("data/encounters.txt", "r") as file:
-					for line in file:
-						# Encontra-se o encontro o qual está sendo procurando:
-						if encounter_found is False:
-							if symbol_encounter_start() in line:
-								if encounter_selected == encounter_index:
-									encounter_found = True
-								else:
-									encounter_index += 1
-						# Caso o encontro seja encontrado, ele é salvo numa lista:
-						else:
-							# Se a linha não possuir nada escrito nela, ou seja, se
-							# ela estiver vazia:
-							if not line.strip():
-								# A criatura anterior é salva e
-								encounter_creatures.append(creature_information)
-								# limpa o string de informações da criatura para poder
-								# começar a salvar uma nova:
-								creature_information = ""
-							else:
-								creature_information += line + "\n"
-
-					print(encounter_creatures)
-
-
-	elif selected is '2':
-		break
-	elif selected is 'C' or 'c':
-		print('Personagens no Arquivo:')
-		print(characters, "\n")
-'''
