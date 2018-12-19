@@ -1,8 +1,38 @@
+Personagens da Campanha:
+Khan:
+Iniciativa: +2;
+Ataques: ;
+
+Nyanta:
+Iniciativa: +6;
+Ataques: ;
+
+Duraran:
+Iniciativa: +7;
+Ataques: ;
+
+Cronos:
+Iniciativa: +5;
+Ataques: ;
+
+Gollel:
+Iniciativa: +3;
+Ataques: ;
+
+Khuz'Aûz:
+Iniciativa: +6;
+Ataques: ;
+
+Piff:
+Iniciativa: +2;
+Ataques: ;
+
+
 Tropas do Refúgio:
 Infantaria – Guerreiro(a) (Nível 1): 
 Descrição: Um(a) jovem trajando uma armadura de couro que possuí uma espécie de camuflagem improvisada com tinta verde e algumas folhas pregadas e portando uma espada longa em uma mão, uma adaga na outra.
 Elfo(a):
-Informações: ND: 1; Elfo(a) (Médio); DV: 1d10 + 1; 11 PV; Iniciativa: +1 (Des); Deslocamento 9m; CA: 14, toque 12, surpresa 12; Atq Base +1, Agr +3; Ataques: Corpo a Corpo: espada élfica de lâmina fina (elven thinblade, Races of the Wild pág. 166) +4 (dano: 1d8+2, 18-20/x2); Ataque Total: espada élfica de lâmina fina +2 (dano: 1d8+2, 18-20/x2) e adaga +1 (dano: 1d4+1, 19-20/x2); Armadura: Armadura de Couro (+2 CA, +6 de Des, 0 de Falha); Espaço/Alcance: 1,5m/1,5m; Tendência: LN; Testes de Resistência: Fortitude: +3, Reflexos: +2, Vontade: +0; Habilidades: For 14 (+2), Des 15 (+2), Con 12 (+1), Int 15 (+2), Sab 11 (+0), Car 12 (+1).
+Informações: ND: 1; Elfo(a) (Médio); DV: 1d10 + 1; 11 PV; Iniciativa: -1 (Des); Deslocamento 9m; CA: 14, toque 12, surpresa 12; Atq Base +1, Agr +3; Ataques: Corpo a Corpo: espada élfica de lâmina fina (elven thinblade, Races of the Wild pág. 166) +4 (dano: 1d8+2, 18-20/x2); Ataque Total: espada élfica de lâmina fina +2 (dano: 1d8+2, 18-20/x2) e adaga +1 (dano: 1d4+1, 19-20/x2); Armadura: Armadura de Couro (+2 CA, +6 de Des, 0 de Falha); Espaço/Alcance: 1,5m/1,5m; Tendência: LN; Testes de Resistência: Fortitude: +3, Reflexos: +2, Vontade: +0; Habilidades: For 14 (+2), Des 15 (+2), Con 12 (+1), Int 15 (+2), Sab 11 (+0), Car 12 (+1).
 Perícias: Intimidar +5, Ouvir +6, Observar +5, Procurar +2, Sentir Motivação +2; 
 Talentos: Foco em Arma (Espada Élfica de Lâmina Fina) e Combater com Duas Armas.
 

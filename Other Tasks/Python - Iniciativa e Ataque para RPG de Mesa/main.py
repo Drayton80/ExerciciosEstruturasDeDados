@@ -1,14 +1,16 @@
 import os
 import re
+import math
 import tkinter as tk
 
+from random import randint
 from encounter import Encounter
+from creature  import Creature
 
 
 encounters_saved = []
-encounter_selected = Encounter("", "")
 
-
+'''
 def update_information_old():
 	listbox_encounters.delete(0, tk.END)
 
@@ -53,8 +55,8 @@ def update_information_old():
 
 			# Salva o conteúdo da linha anterior:
 			previous_line = line
-
-			
+'''
+'''			
 def select_encounter_old():
 	# Define o índice do encontro que será exibido baseado no que foi selecionado
 	# na list box dos encontros. Nada acontece caso não tenha sido feito a seleção
@@ -101,14 +103,14 @@ def select_encounter_old():
 				# Caso contrário, exibe-se normalmente no listbox o conteúdo da linha
 				else:
 					listbox_information.insert(tk.END, line)
-
+'''
 
 def update_information():
 	listbox_encounters.delete(0, tk.END)
 
 	with open("data/encounters.txt", "r") as file:
 		i = 0
-		creature = ""
+		creature_text = ""
 		creatures = []
 		previous_line = ""
 		encounter_end = False
@@ -136,11 +138,11 @@ def update_information():
 					creatures = []
 				# Se apenas a atual estiver vazia, significa que a descrição de uma criatura acabou:
 				elif (not line.strip()):
-					creatures.append(creature)
-					creature = ""
+					creatures.append(Creature(creature_text))
+					creature_text = ""
 				# Se não for nenhuma das anteriores, significará que a criatura ainda está sendo descrita:
 				else:
-					creature += line
+					creature_text += line
 
 			# Salva o conteúdo da linha anterior:
 			previous_line = line
@@ -153,7 +155,8 @@ def select_encounter():
 		selected = listbox_encounters.curselection()
 		encounter_index = selected[0]
 
-		encounter_selected = encounters_saved[encounter_index]
+		encounter_selected = Encounter(encounters_saved[encounter_index].get_title(),
+                                       encounters_saved[encounter_index].get_creatures())
 
 		listbox_information.delete(0, tk.END)
 		listbox_information.insert(tk.END, encounter_selected.get_title())
@@ -162,9 +165,9 @@ def select_encounter():
 		# disposto linha a linha no listbox sem ultrapassar um certo limite horizontal
 		for creature in encounter_selected.get_creatures():
 			# Define o número máximo de palavras que uma linha pode ter:
-			max_line_size = 35
+			max_line_size = 38
 
-			lines = creature.split("\n")
+			lines = creature.get_text().split("\n")
 
 			for line in lines:
 				words = line.split(" ")
@@ -195,6 +198,58 @@ def select_encounter():
 					listbox_information.insert(tk.END, line)
 
 
+def initiative_sort_key(creatures_in_battle):
+	return creatures_in_battle.get_initiative()
+
+def roll_dices():
+	selected = listbox_encounters.curselection()
+	encounter_index = selected[0]
+
+	enemies = encounters_saved[encounter_index].get_creatures()
+	enemies_change = []
+
+	print("tamanho de enemies =", len(enemies))
+
+	characters = []
+	
+	for i in range(len(encounters_saved[0].get_creatures())):
+		characters.append(Creature(encounters_saved[0].get_creatures()[i].get_text()))
+
+	for i in range(len(enemies)):
+		enemies_change.append(Creature(enemies[i].get_text()))
+		enemies_change[i].set_name("Inimigo " + str(i+1) + " - " + enemies[i].get_name())
+
+	characters_encounter = Encounter(encounters_saved[0].get_title(), characters)
+	enemies_encounter = Encounter(encounters_saved[encounter_index].get_title(), enemies_change)
+
+	creatures_in_battle = []
+
+	for i in range(len(enemies_encounter.get_creatures())):
+		creatures_in_battle.append(enemies_encounter.get_creatures()[i])
+
+	for i in range(len(characters_encounter.get_creatures())):
+		creatures_in_battle.append(characters_encounter.get_creatures()[i])
+
+	#creatures_in_battle = enemies_encounter.get_creatures() + characters.get_creatures()
+
+	for i in range(len(creatures_in_battle)):
+		dice_roll  = randint(1,20)
+		initiative = creatures_in_battle[i].get_initiative()
+
+		print(dice_roll)
+		print(initiative)
+
+		creatures_in_battle[i].set_initiative(dice_roll+initiative)
+
+	creatures_in_battle = sorted(creatures_in_battle, key=initiative_sort_key)
+
+	listbox_roll.delete(0, tk.END)
+
+	for creature in creatures_in_battle:
+		listbox_roll.insert(tk.END, creature.get_name() + " = " + str(creature.get_initiative()))
+
+
+
 encounters_title   = []
 button_width = 20
 
@@ -214,7 +269,8 @@ button_update_information = tk.Button(root, width=button_width, text="Atualizar 
                                             command=update_information)
 button_select_encounter   = tk.Button(root, width=button_width, text="Selecionar Encontro",
                                             command=select_encounter)
-button_roll_dices         = tk.Button(root, width=button_width, text="Rolar Dados de Iniciativa e Ataque")
+button_roll_dices         = tk.Button(root, width=button_width, text="Rolar Dados de Iniciativa e Ataque",
+                                            command=roll_dices)
 
 # LAYOUT ORGANIZATION:
 # top buttons:
@@ -241,6 +297,7 @@ scrollbar_roll.config(command=listbox_roll.yview)
 
 # 
 update_information()
+select_encounter()
 
 # SCREEN DEFINITIONS:
 root.geometry("1360x920")
