@@ -57,13 +57,27 @@
 ;; Crie uma função (par n) que retorna #t se n é par e #f se n é ímpar. Em seguida,
 ;; crie uma função (impar n) que retorna #t se n é ímpar e #f se n é par. Pense em
 ;; como definir uma usando a outra (ver observações nas notas de aula).
-
 (define (par n)
-  0)
+  (if (= n 0)
+    #t
+    (if (= n 1)
+      #f
+      (par (- n 2))
+    )
+  )
+)
 
 (define (impar n)
-  0)
+  (if (= n 1)
+    #t
+    (if (= n 0)
+      #f
+      (impar (- n 2))
+    )
+  )
+)
 
+  1
 (define-test-suite testes-par-impar
   (test-true "2 é par"         (par 2))
   (test-true "0 é par"         (par 0))
@@ -79,7 +93,7 @@
 
 ;; Altere a definição de lista-ex4, abaixo, para que ela contenha os números
 ;; de 1 a 5, em ordem crescente, usando apenas cons e a lista vazia
-(define lista-ex4 '())
+(define lista-ex4 (cons 1 (cons 2 (cons 3 (cons 4 (cons 5 '()))))))
 
 ;; para não entregar a resposta no teste, vamos construir a resposta de outra forma...
 (define-test-suite teste-ex4
@@ -89,7 +103,7 @@
 
 ;; Altere a definição de lista-ex5, abaixo, para que ela contenha os números
 ;; de 1 a 5, em ordem crescente, usando a notação com apóstrofo ou a função list
-(define lista-ex5 '())
+(define lista-ex5 '(1 2 3 4 5))
 
 (define-test-suite teste-ex5
   (test-equal? "numeros de 1 a 5" lista-ex5 (range 1 6)))
@@ -102,7 +116,7 @@
 
 ;; Altere a definição da variável elem3-lista6, abaixo, para que ele tenha
 ;; o valor do terceiro elemento de lista6, usando apenas as funções first e rest
-(define elem3-lista6 #f)
+(define elem3-lista6 (first (rest (rest lista6))))
 
 (define-test-suite teste-ex6
   (test-equal? "elem3-lista6 deve ser 33" elem3-lista6 33))
@@ -112,7 +126,8 @@
 ;; Escreva a função terceiro-elemento, abaixo, que retorna sempre o terceiro
 ;; elemento da lista l. Suponha que l sempre tenha 3 elementos ou mais.
 (define (terceiro-elemento l)
-  #f)
+  (first (rest (rest l)))
+)
 
 (define-test-suite testes-terceiro-elemento
   (test-equal? "3o de '(1 2 3)" (terceiro-elemento (list 1 2 3))   3)
@@ -126,7 +141,11 @@
 ;; Crie uma função recursiva soma-lista (abaixo) que, dada uma lista de números,
 ;; calcula a soma dos números contidos
 (define (soma-lista l)
-  #f)
+  (if (empty? l)
+     0
+    (+ (first l) (soma-lista (rest l)))
+  )
+)
 
 (define-test-suite testes-soma-lista
   (test-equal? "soma da lista vazia"                (soma-lista '())                  0)
@@ -140,7 +159,11 @@
 ;; Crie uma função recursiva mult-lista (abaixo) que, dada uma lista de números,
 ;; calcula o produto dos números contidos (a lista vazia deve ter produto igual a 1)
 (define (mult-lista l)
-  #f)
+  (if (empty? l)
+    1
+    (* (first l) (mult-lista (rest l)))
+  )
+)
 
 (define-test-suite testes-mult-lista
   (test-equal? "produto da lista vazia"            (mult-lista '())                  1)
@@ -154,7 +177,14 @@
 ;; Crie uma função recursiva max-lista (abaixo) que, dada uma lista de números naturais,
 ;; calcula o maior número entre os presentes na lista. Use (max-lista '()) = 0.
 (define (max-lista l)
-  #f)
+  (if (empty? l)
+    0
+    (if (> (first l) (max-lista (rest l)))
+      (first l)
+      (max-lista (rest l))
+    )
+  )
+)
 
 (define-test-suite testes-max-lista
   (test-equal? "maximo da lista vazia"       (max-lista '())                     0)
