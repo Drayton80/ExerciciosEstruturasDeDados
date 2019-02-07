@@ -26,14 +26,8 @@
 ;; na lista lst (se houver), retornando uma nova lista com o resultado.
 ;; Veja os testes para exemplos.
 (define (remove-primeiro x lst)
-  (if (empty? lst)
-    lst
-    (if (= x (first lst))
-      (rest lst)
-      (cons (first lst) (remove-primeiro x (rest lst)))
-    )
-  )
-)
+  (if (=
+  '())
 
 (define-test-suite test-remove-primeiro
   (test-equal? "lista vazia"
@@ -55,14 +49,7 @@
 ;; (remove-todos x lst) remove todas as ocorrencias do elemento x
 ;; na lista lst (se houver), retornando uma nova lista com o resultado.
 (define (remove-todos x lst)
-  (if (empty? lst)
-    lst
-    (if (= x (first lst))
-      (remove-todos x (rest lst))
-      (cons (first lst) (remove-todos x (rest lst)))
-    )
-  )
-)
+  '())
 
 (define-test-suite test-remove-todos
   (test-equal? "lista vazia"           (remove-todos 5 '())              '())
@@ -78,19 +65,6 @@
 ;; elementos, como strings? Funciona com listas heterogêneas (com elementos
 ;; de tipos diferentes na mesma lista)? Faça alguns testes que demonstram se
 ;; funcionam ou não. 
-(define-test-suite test-validacao-remove-primeiro-todos
-  (test-equal? "remove-primeiro - lista strings"  (remove-primeiro "um" '("um" "dois" "tres" "quatro"))
-                                                 '("dois" "tres" "quatro"))
-  (test-equal? "remove-todos - lista strings"     (remove-todos "um" '("um" "dois" "tres" "quatro" "um"))
-                                                 '("dois" "tres" "quatro" "um"))
-  (test-equal? "remove-primeiro - lista strings"  (remove-primeiro "um" '("um" 2 3 "quatro"))
-                                                 '(2 3 "quatro"))
-  (test-equal? "remove-todos - lista strings"     (remove-todos "um" '("um" 2 3 "quatro" "um"))
-                                                 '(2 3 "quatro" "um"))
-)
-
-;; Resposta: Pelos testes executados acima, fica percetível que remove-primeiro e remove-todos funcionam apenas para números
-;;           pois a função "(= n m)" apenas aceita números, gerando o ERROR 'contract violation' se for usada com outros valores
 
 
 ;; --- Questão 4 ----------------------------
@@ -111,14 +85,7 @@
 ;; Escreva uma função pertence? tal que
 ;; (pertence? x lst) retorna #t se o elemento x aparece na lista (conjunto) lst
 (define (pertence? x lst)
-  (if (empty? lst)
-    #f
-    (if (= x (first lst))
-      #t
-      (pertence? x (rest lst))
-    )
-  )
-)
+  #f)
 
 (define-test-suite test-pertence?
   (test-false "lista vazia"    (pertence? 5 '()))
@@ -138,16 +105,7 @@
 ;; elemento de cada par vem de l1 e o segundo de l2. O número de pares deve ser igual ao
 ;; tamanho da menor lista. Veja os testes para exemplos.
 (define (combine l1 l2)
-  (if (empty? l1)
-    l1
-    (if (empty? l2)
-      l2
-      (cons (list (first l1) (first l2))
-            (combine (rest l1) (rest l2))
-      )
-    )
-  )
-)
+  '())
 
 (define-test-suite test-combine
   (test-equal? "listas de mesmo tamanho"
@@ -185,11 +143,7 @@
 ;; necessariamente na mesma ordem, e #f caso exista algum elemento que pertence
 ;; a um mas não a outro.
 (define (conjunto=? c1 c2)
- (if (empty? c2)
-    (conjunto=? (rest c1) c2)
-    #f
-  )
-)
+  0)
 
 (define-test-suite test-conjunto=?
   (test-true  "conjuntos vazios"        (conjunto=? '() '()))
@@ -212,14 +166,7 @@
 ;; (remove-duplicatas lst) retorna uma lista com os mesmos elementos de lst mas
 ;; sem que nenhum item ocorra mais de uma vez.
 (define (remove-duplicatas lst)
-  (if (empty? (rest lst))
-    (first lst)
-    (if (= (first lst) (remove-duplicatas (rest lst)))
-      (remove-duplicatas (rest lst))
-      (cons (first lst) (remove-duplicatas (rest lst)))
-    )
-  )
-)
+  '())
 
 ;; Um outro nome para a mesma função poderia ser lista->conjunto, enfatizando a
 ;; sua aplicação na criação de conjuntos a partir de listas. Nesse caso podemos
@@ -327,5 +274,4 @@
              test-conjunto=?
              test-remove-duplicatas
              test-uniao
-             test-interseccao
-             test-validacao-remove-primeiro-todos))
+             test-interseccao))
