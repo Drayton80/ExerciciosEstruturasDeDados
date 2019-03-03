@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy  as np
+from tqdm import tqdm
 
 
 class Days:
@@ -76,29 +77,21 @@ def convertToDays(date):
 	return days
 
 
-def deleteNoise_and_atributoNeutro(df):
+def deleteNoise_and_atributoNeutro(df, i):
 	new_df = pd.DataFrame(df)	
+
+	deleted = False
  
-	for i in range(len(new_df)):
-		if(new_df['state'][i] == "suspended"):
-			new_df.drop(i, inplace = True)				
-				
-		if(new_df['state'][i] == "undefined"):
-			new_df.drop(i, inplace = True)				
-				
-		if(new_df['state'][i] == "canceled"):
-			new_df.drop(i, inplace = True)	
+	if(new_df['state'][i] == "suspended" or 
+       new_df['state'][i] == "undefined" or
+       new_df['state'][i] == "canceled"  or
+       new_df['state'][i] == "failed"    or
+       new_df['state'][i] == "live"      or
+       new_df['usd pledged'][i] == 0.0   ):
+		new_df.drop(i, inplace = True)
+		deleted = True				
 
-		if(new_df['state'][i] == "failed"):
-			new_df.drop(i, inplace = True)	
-
-		if(new_df['state'][i] == "live"):
-			new_df.drop(i, inplace = True)		
-
-		if(new_df['usd pledged'][i] == 0.0):
-			new_df.drop(i, inplace = True)		
-
-	return new_df
+	return (new_df, deleted)
 
 
 # Parte mais significante de um pré-processamento feito para a disciplina 
@@ -106,21 +99,30 @@ def deleteNoise_and_atributoNeutro(df):
 def preprocess_data(data_frame):
 	modified_data_frame = pd.DataFrame(data_frame)
 
-	modified_data_frame = deleteNoise_and_atributoNeutro(modified_data_frame)
-
 	# 3 Listas resumidas em apenas uma lista de objetos, ou seja,
 	# foi feita uma "Mesclagem de Arrays"
 	days_information = []
 
 	# Junção de Loops:
 	for index in range(len(modified_data_frame)):
-		initial_day = convertToDays(modified_data_frame['launched'][index])
-		final_day   = convertToDays(modified_data_frame['deadline'][index])
+		instance_already_deleted = False
 
-		days_information.append(Days(initial_day, final_day, final_day - initial_day))
+		(modified_data_frame, instance_already_deleted) = deleteNoise_and_atributoNeutro(modified_data_frame, index)
+
+		#if(instance_already_deleted == False):
+			#initial_day = convertToDays(modified_data_frame['launched'][index])
+			#final_day   = convertToDays(modified_data_frame['deadline'][index])
+
+			#days_information.append(Days(initial_day, final_day, final_day - initial_day))
+
+	# Caso algum elemento tenha sido removido, é necessário reorganizar os índices:
+	if(len(data_frame) != len(modified_data_frame)):
+		# Quando usa-se o método drop, não há reorganização dos índices. 
+		# Para tal, é necessário usar o reset_index
+		modified_data_frame.reset_index(inplace=True, drop=True)
 
 	modified_data_frame = modified_data_frame.drop(['deadline', 'launched'], 1)
-	modified_data_frame['duration'] = duration
+	#modified_data_frame['duration'] = duration
 
 
 

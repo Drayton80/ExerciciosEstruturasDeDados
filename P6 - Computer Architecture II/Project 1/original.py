@@ -3,26 +3,21 @@ import numpy  as np
 
 
 def atributoNeutro(df, atributo):
-	new_df = pd.DataFrame(df)
+	new_df = pd.DataFrame(df)	
 
-	i = 0		
+	for i in range(len(new_df)):
+		if(new_df['state'][i] == "suspended" or 
+           new_df['state'][i] == "undefined" or
+           new_df['state'][i] == "canceled"  or
+           new_df['state'][i] == "failed"    or
+           new_df['state'][i] == "live"      ):
+			new_df.drop(i, inplace = True)					
 
-	for elemento in new_df[atributo].tolist():
-		if(elemento == "suspended"):
-			new_df.drop(i, inplace = True)				
-				
-		if(elemento == "undefined"):
-			new_df.drop(i, inplace = True)				
-				
-		if(elemento == "canceled"):
-			new_df.drop(i, inplace = True)	
-
-		if(elemento == "failed"):
-			new_df.drop(i, inplace = True)	
-
-		if(elemento == "live"):
-			new_df.drop(i, inplace = True)			
-		i+=1			
+	# Caso algum elemento tenha sido removido, é necessário reorganizar os índices:
+	if(len(df) != len(new_df)):
+		# Quando usa-se o método drop, não há reorganização dos índices. 
+		# Para tal, é necessário usar o reset_index
+		new_df.reset_index(inplace=True, drop=True)	
 
 	return new_df
 
@@ -81,10 +76,16 @@ def deleteNoise(df, atributo):
 
 	i = 0		
  
-	for elemento in new_df[atributo].tolist():
-		if(elemento == 0.0):
+	for i in range(len(new_df)):
+		if(new_df[atributo][i] == 0.0):
 			new_df.drop(i, inplace = True)				
 		i+=1			
+
+	# Caso algum elemento tenha sido removido, é necessário reorganizar os índices:
+	if(len(df) != len(new_df)):
+		# Quando usa-se o método drop, não há reorganização dos índices. 
+		# Para tal, é necessário usar o reset_index
+		new_df.reset_index(inplace=True, drop=True)
 
 	return new_df
 
@@ -100,21 +101,16 @@ def preprocess_data(data_frame):
 	finalDay = []	# No formato de data ano-mês-dia
 	duration = []	# No formato convertido para dias
 
-	counter = 0
-	for dateBegin in dataFrame['launched']:
-		initialDay.append(convertToDays(dateBegin))
-		counter += 1
+	#for i in range(len(dataFrame)):
+		#initialDay.append(convertToDays(dataFrame['launched'][i]))
 
-	counter = 0
-	for dateEnd in dataFrame['deadline']:
-		finalDay.append(convertToDays(dateEnd))
-		
+
+	#for i in range(len(dataFrame)):
+		#finalDay.append(convertToDays(dataFrame['deadline'][i]))
 		# A duração dos dias é igual a diferença entre o dia final e o inicial
-		duration.append(finalDay[counter] - initialDay[counter])
-
-		counter += 1
+		#duration.append(finalDay[counter] - initialDay[counter])
 
 	dataFrame = dataFrame.drop(['deadline', 'launched'], 1)
-	dataFrame['duration'] = duration
+	#dataFrame['duration'] = duration
 
 
