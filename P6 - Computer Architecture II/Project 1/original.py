@@ -2,7 +2,7 @@ import pandas as pd
 import numpy  as np
 
 
-def atributoNeutro(df, atributo):
+def delete_unnecessary_states(df):
 	new_df = pd.DataFrame(df)	
 
 	for index in range(len(new_df)):
@@ -71,7 +71,7 @@ def convertToDays(date):
 	return days
 
 
-def deleteNoise(df, atributo):
+def delete_empty(df, atributo):
 	new_df = pd.DataFrame(df)
 
 	index = 0		
@@ -89,28 +89,94 @@ def deleteNoise(df, atributo):
 
 	return new_df
 
-# Parte mais significante de um pré-processamento feito para a disciplina 
+# Pré-processamento feito para a disciplina 
 # de Introdução à Inteligência Artificial:
 def preprocess_data(data_frame):
-	dataFrame = pd.DataFrame(data_frame)
+	# Recebe o dataFrame e cria uma cópia dele para fazer alterações nela
+	# sem afetar o dataFrame original:
+	modified_data_frame = pd.DataFrame(data_frame)
 
-	dataFrame = atributoNeutro(dataFrame, 'state')
-	dataFrame = deleteNoise(dataFrame, 'usd pledged')
+	# Deleta as colunas irrelevantes para o treinamento do modelo de IA:
+	modified_data_frame.drop(['ID', 'name'], inplace=True, axis=1)
 
-	initialDay = []	# No formato de data ano-mês-dia
-	finalDay = []	# No formato de data ano-mês-dia
+	# Deleta linhas que possuem valores na coluna state os quais não serão úteis:
+	modified_data_frame = delete_unnecessary_states(modified_data_frame)
+	# Deleta linhas que possuem valores vazios na coluna usd pledged:
+	modified_data_frame = delete_empty(modified_data_frame, 'usd pledged')
+
+	# Cria uma lista para guardar cada valor:
+	initial_day = []	# No formato de data ano-mês-dia
+	final_day = []	# No formato de data ano-mês-dia
 	duration = []	# No formato convertido para dias
 
-	for index in range(len(dataFrame)):
-		initialDay.append(convertToDays(dataFrame['launched'][index]))
+	# Itera de 0 até o número de linhas do data frame:
+	for index in range(len(modified_data_frame)):
+		# Para cada índice converte para dias o valor da data de inicio da
+		# arrecadação e salva numa lista:
+		initial_day.append(convertToDays(modified_data_frame['launched'][index]))
+
+	# Itera de 0 até o número de linhas do data frame:
+	for index in range(len(modified_data_frame)):
+		# Para cada índice converte para dias o valor da data de fim da
+		# arrecadação e salva numa lista:
+		final_day.append(convertToDays(modified_data_frame['deadline'][index]))
+		# A duração dos dias é igual a diferença entre o dia final e o inicial
+		duration.append(final_day[index] - initial_day[index])
+
+	# Após pegar a duração do projeto, as colunas deadline e launched não são mais úteis:
+	modified_data_frame.drop(['deadline', 'launched'], inplace=True, axis=1)
+	# É criado uma nova coluna com nome duration:
+	modified_data_frame['duration'] = duration
+
+	# Caso algum elemento tenha sido removido, é necessário reorganizar os índices:
+	if(len(modified_data_frame) != len(data_frame)):
+		# Quando usa-se o método drop, não há reorganização dos índices. 
+		# Para tal, é necessário usar o reset_index
+		modified_data_frame.reset_index(inplace=True, drop=True)
+
+	# Transforma os atributos que são classes em numeros naturais:
+	modified_data_frame['main_category'] = pd.factorize(modified_data_frame['main_category'])[0]
+	modified_data_frame['category'] = pd.factorize(modified_data_frame['category'])[0]
+	modified_data_frame['currency'] = pd.factorize(modified_data_frame['currency'])[0]
+	modified_data_frame['country'] = pd.factorize(modified_data_frame['country'])[0]
+	modified_data_frame['state'] = pd.factorize(modified_data_frame['state'])[0]
+
+	data_frame_list = []
+	biggest_value_in_attribute = []
+	smallest_value_in_attribute = []
+
+	# Para cada coluna (atributo) no data frame:
+	for attribute in modified_data_frame:
+		# Salva seus valores como uma lista em data_frame_list:
+		data_frame_list.append(modified_data_frame[attribute].to_list())
+		# Guarda o menor e o maior valor de cada atributo em uma lista:
+		biggest_value_in_attribute.append(max(modified_data_frame[attribute].to_list()))
+		smallest_value_in_attribute.append(min(modified_data_frame[attribute].to_list())) 
+	
+	# Itera em cada elemento da matriz formada por lista de atributos que
+	# constituem listas de valores:
+	for i in range(len(data_frame_list)):
+		# O índice 5 é aquele relativo ao state, o qual assume apenas os valores 0 ou 1,
+		# significando que já está normalizado:
+		if i != 5:
+			for j in range(len(data_frame_list[i])):
+				# Fórmula de normalização de valores numa lista:
+				normalized_value = (data_frame_list[i][j] - smallest_value_in_attribute[i])/(biggest_value_in_attribute[i] - smallest_value_in_attribute[i])
+
+	            # iat substitui um valor por outro na posição especificada do data frame,
+	            # aqui o j e i são trocados pois houve a inversão de coluna por linha
+	            # quando o data frame foi transformado numa lista de listas:
+				modified_data_frame.iat[j,i] = normalized_value
 
 
-	for index in range(len(dataFrame)):
-		finalDay.append(convertToDays(dataFrame['deadline'][index]))
-		#A duração dos dias é igual a diferença entre o dia final e o inicial
-		duration.append(finalDay[index] - initialDay[index])
 
-	dataFrame = dataFrame.drop(['deadline', 'launched'], 1)
-	dataFrame['duration'] = duration
+
+
+
+
+
+
+	
+
 
 
