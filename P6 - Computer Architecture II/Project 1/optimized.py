@@ -2,31 +2,6 @@ import pandas as pd
 import numpy  as np
 from tqdm import tqdm
 
-'''
-class Days:
-	def __init__(self, initialDay, finalDay, duration):
-		self.initialDay = initialDay
-		self.finalDay = finalDay
-		self.duration = duration
-
-	def get_initialDay(self):
-		return self.initialDay
-
-	def get_finalDay(self):
-		return self.finalDay
-
-	def get_duration(self):
-		return self.duration
-
-	def set_initialDay(self, initialDay):
-		self.initialDay = initialDay
-
-	def set_finalDay(self, finalDay):
-		self.finalDay = finalDay
-
-	def set_duration(self, duration):
-		self.duration = duration
-'''
 
 def convertToDays(date):
 	#|print("Ano:", int(date[0:4]))
@@ -88,8 +63,6 @@ def delete_empty_pledge_and_unnecessary_state(df, i):
 		return True
 	else:
 		return False			
-
-	
 
 
 # Parte mais significante de um pré-processamento feito para a disciplina 
@@ -156,7 +129,8 @@ def preprocess_data(data_frame):
 	B = 100
 	ii = 0
 	jj = 0
-	
+
+	# Aplicação da blocagem:
 	while (ii < number_of_lines):
 		while (jj < number_of_columns):
 			i = ii
