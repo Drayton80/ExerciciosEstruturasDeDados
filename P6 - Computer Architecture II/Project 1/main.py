@@ -57,15 +57,20 @@ def plot_iterations(file_name):
 			optimized_durations.append(float(data[2]))
 
 	# Monta o gráfico com as listas obtidas:
-	plt.plot(data_frame_sizes, original_durations , 'b',
-             data_frame_sizes, optimized_durations, 'g')
+	#plt.plot(data_frame_sizes, original_durations , 'c',
+    #         data_frame_sizes, optimized_durations, 'm')
+	plt.plot(data_frame_sizes, original_durations, color="b", label="Original")
+	plt.plot(data_frame_sizes, optimized_durations, color="c",  label="Otimizado")
+	plt.legend(loc='upper left', frameon=False)
+	plt.ylabel('Tempo (s)')
+	plt.xlabel('Número de Instâncias')
 	# Exibe o gráfico na tela:
 	plt.show()
 
 
 # MAIN:
 data_frame = pd.read_csv("ks-projects-201801.csv")
-file_name  = 'iterations2'
+file_name  = 'iterations_total_optimized'
 
-save_iterations_in_file(data_frame, file_name, 50000, 1000, 1)
+#save_iterations_in_file(data_frame, file_name, 6000, 1000, 5)
 plot_iterations(file_name)
