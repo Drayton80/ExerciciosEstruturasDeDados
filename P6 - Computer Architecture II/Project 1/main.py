@@ -68,6 +68,36 @@ def plot_iterations(file_name):
 	plt.show()
 
 
+def plot_difference(file_name):
+	differences = []
+	data_frame_sizes = []
+
+	# Abrindo um arquivo em modo de leitura:
+	with open("{0}.txt".format(file_name),'r') as file:
+		each_file_line = file.read().splitlines()
+
+		for line in each_file_line:
+			# Separa cada linha em uma lista com
+			# cada um dos três dados que cada uma contém
+			data = line.split(' ')
+
+			data_frame_sizes.append(float(data[0]))
+			original_duration = float(data[1])
+			optimized_duration = float(data[2])
+
+			differences.append(original_duration - optimized_duration)
+
+	# Monta o gráfico com as listas obtidas:
+	#plt.plot(data_frame_sizes, original_durations , 'c',
+    #         data_frame_sizes, optimized_durations, 'm')
+	plt.plot(data_frame_sizes, differences, color="r")
+	plt.ylabel('Diferença de Tempo (s)')
+	plt.xlabel('Número de Instâncias')
+	plt.xlim(0, 20000)
+	# Exibe o gráfico na tela:
+	plt.show()
+
+
 def plot_percentage(file_name):
 	percentage_gain = []
 	data_frame_sizes = []
@@ -93,10 +123,10 @@ def plot_percentage(file_name):
 	#plt.plot(data_frame_sizes, original_durations , 'c',
     #         data_frame_sizes, optimized_durations, 'm')
 	plt.plot(data_frame_sizes, percentage_gain, color="m", label="Original")
-	plt.legend(loc='upper left', frameon=False)
 	plt.ylabel('Porcentagem')
 	plt.xlabel('Número de Instâncias')
 	plt.ylim(0, 100)
+	plt.xlim(0, 20000)
 	# Exibe o gráfico na tela:
 	plt.show()
 
@@ -105,6 +135,10 @@ def plot_percentage(file_name):
 data_frame = pd.read_csv("ks-projects-201801.csv")
 file_name  = 'iterations_total_optimized'
 
-#save_iterations_in_file(data_frame, file_name, 18000, 2000, 2)
-#plot_iterations(file_name)
+#save_iterations_in_file(data_frame, file_name, 20000, 10000, 1)
+plot_iterations(file_name)
+plot_difference(file_name)
 plot_percentage(file_name)
+
+#50000 159.1617090702057 156.94834733009338
+#100000 650.6764981746674 648.5659475326538
