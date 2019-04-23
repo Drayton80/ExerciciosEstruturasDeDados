@@ -16,11 +16,11 @@ def extract_file_column(file_name, column_index):
 
 	return column_values
 
-data_sizes = extract_file_column("times_original_4threads", 0)
-original_durations = extract_file_column("times_original_4threads", 1)
-optimized_durations = extract_file_column("times_optimized_4threads", 1)
-parallelized_durations = extract_file_column("times_parallelized_4threads", 1)
-optimized_and_parallelized_durations = extract_file_column("times_optimized_and_parallelized_4threads", 1)
+data_sizes = extract_file_column("times_original", 0)
+original_durations = extract_file_column("times_original", 1)
+optimized_durations = extract_file_column("times_optimized", 1)
+parallelized_durations = extract_file_column("times_parallelized", 1)
+optimized_and_parallelized_durations = extract_file_column("times_optimized_and_parallelized", 1)
 
 # Monta o gráfico com as listas obtidas:
 #plt.plot(data_frame_sizes, original_durations , 'c',
