@@ -324,8 +324,9 @@
              test-remove-todos
              test-pertence?
              test-combine
-             test-conjunto=?
-             test-remove-duplicatas
-             test-uniao
-             test-interseccao
-             test-validacao-remove-primeiro-todos))
+             ;;test-conjunto=?
+             ;;test-remove-duplicatas
+             ;;test-uniao
+             ;;test-interseccao
+             ;;test-validacao-remove-primeiro-todos
+             ))
