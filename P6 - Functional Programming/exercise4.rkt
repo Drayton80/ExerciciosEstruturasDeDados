@@ -457,10 +457,25 @@
 ;; (conjunto=? c1 c2) retorna #t se c1 e c2 contêm os mesmos elementos, não
 ;; necessariamente na mesma ordem, e #f caso exista algum elemento que pertence
 ;; a um mas não a outro.
-(define (conjunto=? c1 c2)
- (if (empty? c2)
-    (conjunto=? (rest c1) c2)
-    #f
+(define (conjunto=? c1 c2 [aux-c1 c1] [aux-c2 c2])
+  (cond
+    ;; 4) Por fim, há as condições de parada, se ambos, c1 e c2, ficarem vazios, isso significará que
+    ;;    ambos decrementaram igualmente através do rest na condição do first equal de cada um e,
+    ;;    consequentemente, denotará que para cada elemento de uma das listas há um elemento
+    ;;    correspondente na outra lista:
+    [(and (empty? c1) (empty? c2)) #t]
+    ;; 5) Caso apenas c2 esteja vazio isso significará que um dos elementos de uma lista não
+    ;;    possui um correspondente na outra:
+    [(empty? c2)                   #f]
+    ;; 2) Após isso, é necessário restaurar o valor de c1 para possibilitar que ele assuma o papel
+    ;;    que anteriormente estava atribuida a lista c2:
+    [(empty? c1) (conjunto=? aux-c1 c2 aux-c1 c1)]
+    ;; 3) Então é possível fazer com que, para cada elemento de c2, seja checado se há um correspondente em c1:
+    [(and (empty? aux-c2)      (equal? (first aux-c1) (first c2)))  (conjunto=? (rest aux-c1) (rest c2) aux-c1 aux-c2)]
+    [(and (empty? aux-c2) (not (equal? (first aux-c1) (first c2)))) (conjunto=? (rest     c1)       c2  aux-c1 aux-c2)]
+    ;; 1) Primariamente, para cada elemento de c1 checa-se ele possui um correspondende em toda a lista c2:
+    [     (equal? (first c1) (first c2))  (conjunto=? (rest c1) (rest aux-c2) aux-c1 aux-c2)]
+    [(not (equal? (first c1) (first c2))) (conjunto=?       c1  (rest     c2) aux-c1 aux-c2)]
   )
 )
 
@@ -475,8 +490,7 @@
   (test-false "(3 2 1) e (1 3 7)"       (conjunto=? '(3 2 1) '(1 3 7))))
 
 
-;; --- Questão 7 ----------------------------
-
+;; --- Questão 7 --------------------------------------------------------------------
 ;; Outra função de apoio que pode ser útil é uma que, dada uma
 ;; lista qualquer (podendo conter itens duplicados) retorna uma lista válida como
 ;; conjunto, sem itens duplicados. Podemos chamar essa função remove-duplicatas.
@@ -484,13 +498,12 @@
 ;; Escreva a função remove-duplicatas tal que
 ;; (remove-duplicatas lst) retorna uma lista com os mesmos elementos de lst mas
 ;; sem que nenhum item ocorra mais de uma vez.
-(define (remove-duplicatas lst)
-  (if (empty? (rest lst))
-    (first lst)
-    (if (= (first lst) (remove-duplicatas (rest lst)))
-      (remove-duplicatas (rest lst))
-      (cons (first lst) (remove-duplicatas (rest lst)))
-    )
+(define (remove-duplicatas lst [compare-lst lst] [final-lst '()])
+  (cond
+    [(empty?         lst) (reverse final-lst)]
+    [(empty? compare-lst) (cons (first lst) final-lst)]
+    [     (equal? (first lst) (first compare-lst))  (remove-duplicatas (rest lst)              lst  final-lst)]
+    [(not (equal? (first lst) (first compare-lst))) (remove-duplicatas       lst (rest compare-lst) final-lst)]
   )
 )
 
@@ -518,14 +531,18 @@
              (conjunto=? (lista->conjunto '(1 2 3 1 2 3 1 2 3 1 2 3)) '(1 2 3))))
 
   
-;; --- Questão 7 ----------------------------
-
+;; --- Questão 8 --------------------------------------------------------------------
 ;; Agora vamos implementar as operações de conjuntos implementados com listas.
 
 ;; Escreva a função uniao tal que
 ;; (uniao c1 c2) retorna um conjunto contendo os elementos de c1 e c2, sem duplicações.
-(define (uniao c1 c2)
-  '())
+(define (uniao c1 c2 [united-c '()])
+  (cond
+    [(not (empty? c1))                      (uniao (rest c1)      c2  (cons (first c1) united-c))]
+    [(and (empty? c1) (not (empty? c2)))    (uniao       c1 (rest c2) (cons (first c2) united-c))]
+    [(and (empty? c1) (empty? c2)) (reverse (remove-duplicatas united-c))]
+  )
+)
 
 ;; Dica: com o que vimos até agora tem pelo menos duas maneiras de escrever essa função.
 ;; Uma forma é uma função recursiva que tem que eliminar itens duplicados a cada passo.
@@ -549,7 +566,7 @@
              (conjunto=? (uniao '(1 4 5) '(4 5 6))  '(1 4 5 6))))
 
 
-;; --- Questão 8 -----------------------
+;; --- Questão 9 -----------------------
 
 ;; Escreva uma função interseccao tal que
 ;; (interseccao c1 c2) retorna um conjunto contendo os elementos que ocorrem
@@ -576,7 +593,7 @@
                          '(1 2 3 4 5))))
 
 
-;; --- Questão 9 -----------------------
+;; --- Questão 10 -----------------------
 
 ;; Escreva uma função diferenca tal que
 ;; (diferenca c1 c2) retorna um conjunto que tem todos os elementos de c1 que
@@ -597,9 +614,9 @@
              test-remove-todos
              test-pertence?
              test-combine
-             ;;test-conjunto=?
-             ;;test-remove-duplicatas
-             ;;test-uniao
+             test-conjunto=?
+             test-remove-duplicatas
+             test-uniao
              ;;test-interseccao
              ;;test-validacao-remove-primeiro-todos
   )
