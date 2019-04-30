@@ -293,8 +293,8 @@
 
 
 
-;; --- EXERCISE III ---------------------------------------------------------------------
-;; --- Questão 1 ----------------------------
+;; --- EXERCISE III ---------------------------------------------------------------------------------
+;; --- Questão 1 ----------------------------------------------------------------------------
 ;; Escreva uma função remove-primeiro tal que
 ;; (remove-primeiro x lst) remove a primeira ocorrência do elemento x
 ;; na lista lst (se houver), retornando uma nova lista com o resultado.
@@ -332,18 +332,20 @@
                (remove-primeiro 3 '(11 7 23 55 42)) '(11 7 23 55 42)))
 
 
-;; --- Questão 2 ----------------------------
 
+;; --- Questão 2 -----------------------------------------------------------------------------
 ;; Escreva uma função remove-todos tal que
 ;; (remove-todos x lst) remove todas as ocorrencias do elemento x
 ;; na lista lst (se houver), retornando uma nova lista com o resultado.
-(define (remove-todos x lst)
-  (if (empty? lst)
-    lst
-    (if (= x (first lst))
-      (remove-todos x (rest lst))
-      (cons (first lst) (remove-todos x (rest lst)))
-    )
+(define (remove-todos x lst [aux-lst '()])
+  (cond
+    [(empty? lst) (reverse aux-lst)                                                         ]
+    ;; Como não é necessário remover apenas o primeiro, não é necessário retornar um valor
+    ;; que indique isso (no caso anterior send o proprio aux-lst)
+    [(equal? x (first lst)) (remove-todos x (rest lst) aux-lst)                             ]
+    ;; Entra nessa condição enquanto os elementos a serem removidos não forem encontrados e
+    ;; a lista não estiver vazia (condição de parada representada pelo primeiro item de cond
+    [(not (equal? x (first lst))) (remove-todos x (rest lst) (cons (first lst) aux-lst))    ]
   )
 )
 
@@ -354,8 +356,7 @@
   (test-equal? "nenhuma ocorrência"    (remove-todos 3 '(11 7 23 55 42)) '(11 7 23 55 42)))
 
 
-;; --- Questão 3 ----------------------------
-
+;; --- Questão 3 -------------------------------------------------------------------------------
 ;; As funções remove-primeiro e remove-todos, acima, funcionam apenas para
 ;; listas de números, ou também funcionam para listas de outros tipos de
 ;; elementos, como strings? Funciona com listas heterogêneas (com elementos
@@ -372,12 +373,10 @@
                                                  '(2 3 "quatro" "um"))
 )
 
-;; Resposta: Pelos testes executados acima, fica percetível que remove-primeiro e remove-todos funcionam apenas para números
-;;           pois a função "(= n m)" apenas aceita números, gerando o ERROR 'contract violation' se for usada com outros valores
+;; Resposta: A nova versão com tail recursive funciona para todos os tipos
 
 
-;; --- Questão 4 ----------------------------
-
+;; --- Questão 4 ---------------------------------------------------------------------
 ;; Listas podem ser usadas como base para a criação de várias outras estruturas
 ;; de dados. Embora raramente uma implementação baseada em listas seja a mais
 ;; rápida, pode ser utilizada para conjuntos de dados pequenos e é fácil de criar
@@ -393,6 +392,8 @@
 
 ;; Escreva uma função pertence? tal que
 ;; (pertence? x lst) retorna #t se o elemento x aparece na lista (conjunto) lst
+
+;; A versão anterior dessa função já usava Tail Recursion:
 (define (pertence? x lst)
   (if (empty? lst)
     #f
@@ -410,20 +411,15 @@
   (test-true  "5 pertence"     (pertence? 5 '(1 2 3 4 5))))
 
 
-;; --- Questão 5 ----------------------------
+;; --- Questão 5 --------------------------------------------------------------------
 ;; Para praticar a ideia primeiro, escreva uma função combine tal que
 ;; (combine l1 l2) retorna uma lista de pares (listas de dois elementos) onde o primeiro
 ;; elemento de cada par vem de l1 e o segundo de l2. O número de pares deve ser igual ao
 ;; tamanho da menor lista. Veja os testes para exemplos.
-(define (combine l1 l2)
-  (if (empty? l1)
-    l1
-    (if (empty? l2)
-      l2
-      (cons (list (first l1) (first l2))
-            (combine (rest l1) (rest l2))
-      )
-    )
+(define (combine l1 l2 [aux-list '()])
+  (if (or (empty? l1) (empty? l2))
+    (reverse aux-list)
+    (combine (rest l1) (rest l2) (cons (list (first l1) (first l2)) aux-list))    
   )
 )
 
@@ -444,8 +440,7 @@
                (combine '(4 5 6) '(22 33))     '((4 22) (5 33))))
 
 
-;; --- Questão 6 ----------------------------
-
+;; --- Questão 6 ------------------------------------------------------------------------
 ;; Antes de trabalhar com conjuntos, é interessante ter algumas funções de apoio.
 
 ;; Além da falta de itens duplicados, outra característica dos conjuntos é a
