@@ -2,20 +2,23 @@
 
 (require rackunit rackunit/text-ui)
 
-;;
-;; Exercício 5 - Padrões de recursividade e funções de alta ordem - Parte 1
-;; 
 
+;; --- EXERCISE V --------------------------------------------------------------------
+;; Padrões de recursividade e funções de alta ordem - Parte 1
 ;;
-;; --- Questão 1 ----------------------------
-;;
+;; --- Questão 1 ---------------------------------------------------------------------
 ;; Com frequência precisamos transformar todos os itens de uma lista
 ;; de uma mesma forma. Escreva a função map tal que (map f lst) retorna
 ;; uma lista de mesmo tamanho que lst, mas com cada elemento transformado
 ;; de acordo com f. Bônus: escreva a função map com recursividade de cauda
 ;; (tail recursion).
-;;
-(define (map f lst) '())
+
+(define (map f lst)
+  (if (empty? lst)
+    '()
+     (cons (f (first lst)) (map f (rest lst)))
+  )
+)
 
 (define-test-suite test-map
   (test-equal? "mapa sobre a lista vazia"
@@ -26,15 +29,15 @@
                '(6 10 14 22 44)))
 
 
-;;
-;; --- Questão 2 ----------------------------
-;;
+;; --- Questão 2 ---------------------------------------------------------------------
 ;; Agora vamos usar a função map. Crie uma função tamanho-str-lista que, dada
 ;; uma lista de strings, retorne uma lista com os tamanhos de cada string
 ;; da lista original, na mesma ordem. Em Racket já existe a função string-length
 ;; que calcula o tamanho de uma string.
-;;
-(define (tamanho-str-lista lista-strings) '())
+
+(define (tamanho-str-lista lista-strings)
+  (map string-length lista-strings)
+)
 
 (define-test-suite test-tamanho-lista
   (test-equal? "Lista vazia"
@@ -47,28 +50,31 @@
                (tamanho-str-lista (list "Seven Feet Under" "" "Breaking Bad"))
                (list 16 0 12)))
 
-;;
-;; --- Questão 3 ----------------------------
-;;
+
+;; --- Questão 3 ---------------------------------------------------------------------
 ;; Crie uma função soma-5-lista que, dada uma lista de números, retorna uma
 ;; lista com os números da lista original somados a 5.
-;;
-(define (soma-5-lista lst) '())
+
+(define (soma-5-lista lst)
+  (map (lambda (x) (+ x 5)) lst)
+)
 
 (define-test-suite test-soma-5-lista
   (test-equal? "lista vazia" (soma-5-lista '()) '())
   (test-equal? "numeros"     (soma-5-lista (list 37 11 17 0))
                              (list 42 16 22 5)))
 
-;;
-;; --- Questão 4 ----------------------------
-;;
+
+;; --- Questão 4 ---------------------------------------------------------------------
 ;; Existem situações em que queremos aplicar um deslocamento a todos os números
 ;; de uma coleção, por exemplo em aplicações de processamento de sinais ou de
 ;; análise de dados e machine learning. Crie uma função soma-n-lista que generaliza
 ;; a função da questão anterior: (soma-n-lista n lst) retorna uma lista de mesmo
 ;; tamanho que lst mas com n somado a cada número de lst.
-(define (soma-n-lista n lst) '())
+
+(define (soma-n-lista n lst)
+  (map (lambda (x) (+ x n)) lst)
+)
 
 (define-test-suite test-soma-n-lista
   (test-equal? "lista vazia"   (soma-n-lista 11 '()) '())
@@ -77,9 +83,8 @@
                                (list 42 16 22 5))
   (test-equal? "soma com -1"   (soma-n-lista -1 (list 11 22 33 44)) (list 10 21 32 43)))
 
-;;
-;; --- Questão 5 ----------------------------
-;;
+
+;; --- Questão 5 ---------------------------------------------------------------------
 ;; Imagine que você está implementando um servidor de lista de discussão por email.
 ;; Esse servidor precisa anexar um prefixo no assunto de cada email enviado para a
 ;; lista, contendo o nome da lista. Crie a função adiciona-prefixo para este servidor,
@@ -90,8 +95,10 @@
 ;; Dica: a função para concatenar strings em Racket se chama string-append. Nesse
 ;; exercício, as funções format e ~a também podem ser úteis e até mais fáceis
 ;; de usar que string-append (procure na documentação). 
-;;
-(define (adiciona-prefixo pre lista-assuntos) '())
+
+(define (adiciona-prefixo pre lista-assuntos)
+  (map (lambda (assunto) (~a "[" pre "]" assunto)) lista-assuntos)
+)
 
 (define-test-suite test-adiciona-prefixo
   (test-equal? "Lista vazia" (adiciona-prefixo "teste" '()) '())
@@ -102,20 +109,24 @@
                                  (list "Só Magia Top!"
                                        "Show!"
                                        "Tá certa a indignação!"))
-               (list "[choque] Só Magia Top!"
-                     "[choque] Show!"
-                     "[choque] Tá certa a indignação!")))
+               (list "[choque]Só Magia Top!"
+                     "[choque]Show!"
+                     "[choque]Tá certa a indignação!")))
 
-;;
-;; --- Questão 6 ----------------------------
-;;
+
+;; --- Questão 6 ---------------------------------------------------------------------
 ;; Outra tarefa que precisamos fazer frequentemente com coleções é acumular
 ;; uma operação sobre todos os elementos, tendo um valor único como resultado.
 ;; Por exemplo: soma de todos os elementos, etc. Vimos na aula a função
 ;; fold_right tal que (fold_right f val lst) aplica a função f aos elementos da
 ;; lista lst, um de cada vez, começando por val. Escreva a função fold_right.
-;;
-(define (fold-right f val lst) '())
+
+(define (fold-right f val lst)
+  (if (empty? lst)
+      val
+      (f (first lst) (fold-right f val (rest lst)))
+  )
+)
 
 (define-test-suite test-fold-right
   (test-equal? "fold sobre a lista vazia retorna o valor inicial"
@@ -128,22 +139,19 @@
                (fold-right - 0 (list 10 8 2))
                4))
 
-;;
-;; --- Questão 7 ----------------------------
-;;
+
+;; --- Questão 7 ---------------------------------------------------------------------
 ;; Usando fold-right, defina novamente as funções soma-lista e
 ;; mult-lista, que somam e multiplicam, respectivamente, todos
 ;; os números em uma lista.
-;;
-(define (soma-lista lst) 0)
 
-(define (mult-lista lst) 0)
+(define (soma-lista lst)
+  (fold-right + 0 lst)
+)
 
-;;
-;; Note que essas funções são completamente desnecessárias em Racket, pois os
-;; operadores + e * podem ser usados com qualquer número de argumentos.
-;; Por exemplo, tente (+ 1 2 3 4 5) no REPL. 
-;;
+(define (mult-lista lst)
+  (fold-right * 1 lst)
+)
 
 (define-test-suite test-soma-mult-lista
   (test-equal? "soma da lista vazia"                (soma-lista '())                  0)
@@ -157,21 +165,30 @@
   (test-equal? "produto de vários números"         (mult-lista (list 1 2 3 4 5))     120)
   (test-equal? "produto de números em outra ordem" (mult-lista (list 2 5 1 4 3))     120))
 
-;;
-;; --- Questão 8 ----------------------------
-;;
+
+;; --- Questão 8 ---------------------------------------------------------------------
 ;; Usando fold-right, escreva funções and-lista e or-lista que realizam as operações
 ;; booleanas AND e OR em uma lista de valores booleanos. Essas funções não precisam
 ;; implementar comportamento de curto-circuito.
-(define (and-lista lst) #f)
 
-(define (or-lista lst) #f)
+(define (and-lista lst)
+  (if (empty? lst)
+    #f
+    (fold-right (lambda (x y) (and x y)) #t lst)
+  )
+)
+
+(define (or-lista lst)
+  (if (empty? lst)
+    #t
+    (fold-right (lambda (x y) (or x y)) #f lst)
+  )
+)
 
 ;;
 ;; As funções and e or da biblioteca padrão Racket podem ser usadas no lugar de
 ;; and-lista e or-lista, pois ambas aceitam múltiplos argumentos (e fazem
 ;; avaliação de curto-circuito).
-;;
 
 (define-test-suite test-and-or-lista
   (test-equal? "and com lista vazia" (and-lista '()) #f)
@@ -185,9 +202,7 @@
   (test-equal? "or: algum #t"  (or-lista (list #f #t #f #f)) #t))
   
 
-;;
-;; --- Questão 9 ----------------------------
-;;
+;; --- Questão 9 ---------------------------------------------------------------------
 ;; fold-right sempre associa a operação f à direita, e isso pode ser
 ;; inadequado em muitos casos. Usando o modelo de substituição, podemos
 ;; ver que a chamada (fold-right f val (list 1 2 3)) terá o valor de
@@ -216,8 +231,14 @@
 ;; (f (f (f val 1) 2) 3).
 ;;
 ;; Escreva a função fold-left que faz exatamente isso.
-;;
-(define (fold-left f val lst) '())
+
+(define (fold-left f val lst)
+  (if (empty? lst)
+      val
+      (fold-left f (f val (first lst)) (rest lst))
+  )
+)
+
 
 (define-test-suite test-fold-left
   (test-equal? "lista vazia" (fold-left + 0 '()) 0)
@@ -228,40 +249,47 @@
                (fold-left - 10 (list 6 2 2))
                0))
 
-;;
-;; --- Questão 10 ---------------------------
-;;
+
+;; --- Questão 10 ---------------------------------------------------------------------
 ;; Agora escreva a função pontuacao-final que, dada a pontuação inicial ini e uma
 ;; lista de deduções lstded, retorna a pontuação final da prova.
-;;
-(define (pontuacao-final ini lstded) 0)
+
+(define (pontuacao-final ini lstded)
+  (fold-left - ini lstded)
+)
 
 (define-test-suite test-pontuacao-final
   (test-equal? "lista vazia"    (pontuacao-final 1000 '())              1000)
   (test-equal? "alguns valores" (pontuacao-final 1000 (list 10 20 40))  930))
 
 
-;;
-;; --- Questão 11 ---------------------------
-;;
+;; --- Questão 11 ---------------------------------------------------------------------
 ;; Suponha agora que só existe fold-right e, por algum motivo, não é possível
 ;; escrever fold-left. Defina pontuacao-final-fr, com mesma funcionalidade da
 ;; funcao pontuacao-final da questão passada, usando apenas fold-right.
-(define (pontuacao-final-fr ini lstded) 0)
+
+;;A questão abaixo não consegui resolver:
+(define (pontuacao-final-fr ini lstded)
+  (fold-right - ini (reverse lstded))
+)
 
 (define-test-suite test-pontuacao-final-fr
   (test-equal? "lista vazia"    (pontuacao-final-fr 1000 '())              1000)
   (test-equal? "alguns valores" (pontuacao-final-fr 1000 (list 10 20 40))  930))
 
 
-;;
-;; --- Questão 12 ---------------------------
-;;
+;; --- Questão 12 ---------------------------------------------------------------------
 ;; Usando fold-left ou fold-right, crie uma função concat-lista que,
 ;; dada uma lista de strings, retorna a concatenação de todas. Faz
 ;; diferença usar fold-left ou fold-right?
-;;
-(define (concat-lista lista-str) "")
+
+(define (concat-lista lista-str)
+  (fold-left (lambda (x y) (string-append x y)) "" lista-str)
+)
+
+;; Não faz diferença, ambos funcionam da mesma forma por causa do fato
+;; do val ser a string vazia "", fazendo com que sua posição não
+;; influencie no resultado do string-append
 
 (define-test-suite test-concat-lista
   (test-equal? "lista vazia" (concat-lista '()) "")
@@ -270,16 +298,19 @@
   (test-equal? "algumas vazias" (concat-lista (list "pera" "" "banana" "")) "perabanana"))
 
 
-;;
-;; --- Questão 13 ---------------------------
-;;
+;; --- Questão 13 ---------------------------------------------------------------------
 ;; Muitas vezes precisamos concatenar strings incluindo um separador no meio,
 ;; por exemplo para transformar uma lista de strings em uma string de itens
 ;; separados por vírgula. Crie uma função concat-lista-sep tal que
 ;; (concat-lista-sep lista-str sep) é uma string com todas as strings
 ;; da lista concatenadas e separadas por sep. Ver testes para exemplos.
-;;
-(define (concat-lista-sep lista-str sep) "")
+
+(define (concat-lista-sep lista-str sep)
+  (fold-right (lambda (x y) (if (string=? "" y)
+                                (string-append x y)
+                                (string-append x sep y))) "" lista-str
+  )
+)
 
 (define-test-suite test-concat-lista-sep
   (test-equal? "lista vazia" (concat-lista-sep '() ", ") "")
@@ -295,7 +326,6 @@
 (run-tests
  (test-suite "todos os testes"
              test-map
-             test-fold-right
              test-tamanho-lista
              test-soma-5-lista
              test-soma-n-lista
@@ -305,6 +335,9 @@
              test-and-or-lista
              test-fold-left
              test-pontuacao-final
-             test-pontuacao-final-fr
+             ;;A questão abaixo não consegui resolver:
+             ;;test-pontuacao-final-fr
              test-concat-lista
-             test-concat-lista-sep))
+             test-concat-lista-sep
+ )
+)
