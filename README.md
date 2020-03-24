@@ -1,1 +1,1 @@
-# ExerciciosEstruturasDeDados
+# UFPB's Assignments
