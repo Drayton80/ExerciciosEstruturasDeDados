@@ -1,7 +1,7 @@
 from math import sqrt
 
-X = [30, 35, 45, 50, 60]
-Y = [40, 50, 55, 65, 70]
+X = [28, 34, 39, 41, 46, 49, 53, 58, 61]
+Y = [40, 51, 52, 55, 53, 60, 65, 67, 78]
 
 alfa = 0.05
 
@@ -113,9 +113,9 @@ for x0 in X:
 
 print("Teste de Significância para os Coeficientes da Regressão Linear Simples:")
 tc = round(beta_1/(sqrt(QMRes/Sxx)), 4)
-print("β0 - Estatística de Teste: tc =", tc)
-tc = round(beta_0/(sqrt(QMRes*((1/n)+((media_x**2)/Sxx)))), 4)
 print("β1 - Estatística de Teste: tc =", tc)
+tc = round(beta_0/(sqrt(QMRes*((1/n)+((media_x**2)/Sxx)))), 4)
+print("β0 - Estatística de Teste: tc =", tc)
 
 print("\nANÁLISE DE RESÍDUOS DA REGRESSÃO LINEAR SIMPLES:")
 print("Gráfico dos 45°:")
